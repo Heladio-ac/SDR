@@ -8,7 +8,7 @@ public class Plots {
         System.out.println("Kiubo");
     }
     
-    public static vois kiubo2(){
+    public static void kiubo2(){
         System.out.println("Kiubo2 XD");
     }
 }
