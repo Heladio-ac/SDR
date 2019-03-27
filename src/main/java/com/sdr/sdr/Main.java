@@ -1,16 +1,17 @@
 package com.sdr.sdr;
 
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
-import com.mongodb.client.MongoDatabase;
+
 import javax.swing.table.DefaultTableModel;
 
 public class Main {
     
-    public static MongoDatabase db;
+    public static DB db;
     
     public static void main(String[] args) {
-        MongoClient conexion =  new MongoClient();
-        db = conexion.getDatabase("SDR");
+        MongoClient conexion = new MongoClient("localhost", 27017);
+        db = conexion.getDB("SDR");
         
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

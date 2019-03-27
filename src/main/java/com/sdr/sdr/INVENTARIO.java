@@ -128,7 +128,7 @@ public class INVENTARIO extends javax.swing.JFrame {
     public void busca(){
     
     //Metodo para hacer busquedas
-     DBCollection coll = (DBCollection) db.getCollection("productos");
+     DBCollection coll =  db.getCollection("productos");
      BasicDBObject filtro = new BasicDBObject(); //si se realiza consulta con foltro se hace este objeto
      String j=jTextField1.getText();
      filtro=new BasicDBObject("Articulo",new BasicDBObject("$regex",j));//pones el filtro que se requiera
