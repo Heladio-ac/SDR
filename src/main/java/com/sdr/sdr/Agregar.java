@@ -50,7 +50,7 @@ public class Agregar extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         StockMinimo = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        StockMaximo = new javax.swing.JTextField();
+        StockActual = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
@@ -78,7 +78,13 @@ public class Agregar extends javax.swing.JFrame {
 
         jLabel8.setText("Stock Minimo: ");
 
-        jLabel9.setText("Stock Maximo: ");
+        StockMinimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                StockMinimoActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Stock a agregar: ");
 
         jButton1.setText("AGREGAR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -127,7 +133,7 @@ public class Agregar extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(StockMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(StockActual, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
@@ -147,7 +153,7 @@ public class Agregar extends javax.swing.JFrame {
                         .addComponent(jButton1)
                         .addGap(106, 106, 106)
                         .addComponent(jButton2)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,7 +195,7 @@ public class Agregar extends javax.swing.JFrame {
                     .addComponent(jLabel8)
                     .addComponent(StockMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(StockMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(StockActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(71, 71, 71)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
@@ -216,7 +222,7 @@ public class Agregar extends javax.swing.JFrame {
         String precio=txtPrecio.getText();
         String codigo=txtCodigo.getText();
         String stockMin=StockMinimo.getText();
-        String stockMax=StockMaximo.getText();
+        String stockMax=StockActual.getText();
         String tipo=comboTipo.getSelectedItem().toString();
         if(articulo.equals("") || banda.equals("") || titulo.equals("") || precio.equals("") || codigo.equals("") || stockMin.equals("") || stockMax.equals("")){
             JOptionPane.showMessageDialog(null,"Le hace falta llenar algún campo");
@@ -241,13 +247,17 @@ public class Agregar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void StockMinimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StockMinimoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_StockMinimoActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField StockMaximo;
+    private javax.swing.JTextField StockActual;
     private javax.swing.JTextField StockMinimo;
     private javax.swing.JComboBox<String> comboColor;
     private javax.swing.JComboBox<String> comboGenero;

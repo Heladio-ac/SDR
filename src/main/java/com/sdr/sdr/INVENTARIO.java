@@ -57,7 +57,7 @@ public class INVENTARIO extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        table.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        table.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
@@ -123,20 +123,25 @@ public class INVENTARIO extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(8, 8, 8)
                                 .addComponent(bBuscar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bmostrar)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton2)
-                            .addComponent(jButton1))))
-                .addContainerGap(50, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(jButton1)))))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -152,10 +157,10 @@ public class INVENTARIO extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addComponent(bBuscar)
-                            .addComponent(bmostrar))))
+                            .addComponent(bmostrar)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -182,20 +187,23 @@ try
       String color = (String)obj.get("Color");
       String tama = (String)obj.get("Tamaño");
       String item = (String)obj.get("Articulo");
-      String banda = (String)obj.get("Banda");
-      String titulo = (String)obj.get("Titulo");
-      String desc=color+"_"+banda+tama+"_"+titulo;
+      String titulo = (String)obj.get("Titulo"),Tipo=(String)obj.get("Tipo"),banda = (String)obj.get("Banda");
+      String desc=color+","+banda+","+Tipo+tama+","+titulo;
+      
 
      BasicDBObject qty = (BasicDBObject) obj.get("Stock");
                 Object  cantidad = (Object) qty.get("StockActual");
+                Object  cantidad1 = (Object) qty.get("StockMinimo");
       
-      model.addRow(new Object[] { item,desc,cantidad});
+      model.addRow(new Object[] { item,desc,cantidad,cantidad1});
                
                     
                     
    }
    table.setModel(model);
-  
+   table.getColumnModel().getColumn(2).setPreferredWidth(20);
+   table.getColumnModel().getColumn(3).setPreferredWidth(20);
+   table.getColumnModel().getColumn(0).setPreferredWidth(20);
 
 
   
@@ -220,18 +228,18 @@ try
    while(cursor.hasNext()) 
    {
       DBObject obj = cursor.next();
-      String color = (String)obj.get("Color");
+       String color = (String)obj.get("Color");
       String tama = (String)obj.get("Tamaño");
       String item = (String)obj.get("Articulo");
-      String banda = (String)obj.get("Banda");
-      String titulo = (String)obj.get("Titulo");
-      String desc=color+"_"+banda+tama+"_"+titulo;
+      String titulo = (String)obj.get("Titulo"),Tipo=(String)obj.get("Tipo"),banda = (String)obj.get("Banda");
+      String desc=color+","+banda+","+Tipo+tama+","+titulo;
 
      BasicDBObject qty = (BasicDBObject) obj.get("Stock");
                 Object  cantidad = (Object) qty.get("StockActual");
                 Object  cantidad1 = (Object) qty.get("StockMinimo");
       
-      model.addRow(new Object[] { item,desc,cantidad});
+                
+      model.addRow(new Object[] { item,desc,cantidad,cantidad1});
       
      /* double i= (double) qty;
        if(i< 30){
@@ -239,8 +247,10 @@ try
         }*/
 
    }
-      table.getColumnModel().getColumn(0).setPreferredWidth(27);
       table.setModel(model);
+      table.getColumnModel().getColumn(2).setPreferredWidth(20);
+      table.getColumnModel().getColumn(3).setPreferredWidth(20);
+      table.getColumnModel().getColumn(0).setPreferredWidth(20);
 } 
 finally 
 {

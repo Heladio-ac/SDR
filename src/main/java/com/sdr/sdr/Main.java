@@ -46,11 +46,11 @@ public class Main {
     }
     
     public static DefaultTableModel tabla(){
-        String[] columnNames = {"Articulo", "Descripcion", "Cantidad"};
+        String[] columnNames = {"Articulo", "Descripcion", "StockActual","StockMinimo"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             @Override
             public boolean isCellEditable(int fil, int col) {
-                return col==3;
+                return col==4;
             }
         };
         return model;
