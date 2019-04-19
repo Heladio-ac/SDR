@@ -240,7 +240,7 @@ public class Agregar extends javax.swing.JFrame {
             
             BasicDBObject documentDetail = new BasicDBObject();
             documentDetail.put("StockMinimo",Integer.parseInt(stockMin));
-            documentDetail.put("StockMaximo",Integer.parseInt(stockMax));
+            documentDetail.put("StockActual",Integer.parseInt(stockMax));
             document.put("Stock", documentDetail);
             collection.insert(document);
             JOptionPane.showMessageDialog(null,"Registro guardado con exito");
