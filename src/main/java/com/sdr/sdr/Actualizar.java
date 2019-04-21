@@ -7,21 +7,20 @@ package com.sdr.sdr;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
-import javax.swing.JOptionPane;
 import static com.sdr.sdr.Main.db;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author berna
  */
-public class Agregar extends javax.swing.JFrame {
+public class Actualizar extends javax.swing.JFrame {
 
     /**
-     * Creates new form Agregar
+     * Creates new form Actualizar
      */
-    public Agregar() {
+    public Actualizar() {
         initComponents();
-        setLocationRelativeTo(null);
     }
 
     /**
@@ -33,6 +32,18 @@ public class Agregar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel5 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        txtTitulo = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        comboTipo = new javax.swing.JComboBox<>();
+        txtPrecio = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtCodigo = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        StockMinimo = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         txtArticulo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -40,23 +51,32 @@ public class Agregar extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         comboGenero = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        txtBanda = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        txtTitulo = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        txtPrecio = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        txtCodigo = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        StockMinimo = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
         StockActual = new javax.swing.JTextField();
+        txtBanda = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        comboTipo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel5.setText("Titulo:");
+
+        jButton2.setText("SALIR");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel10.setText("Tipo:");
+
+        jLabel6.setText("Precio:");
+
+        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ROPA", "DISCOS" }));
+
+        jLabel7.setText("Codigo: ");
+
+        jLabel8.setText("Stock Minimo: ");
+
+        jLabel9.setText("Stock a agregar: ");
 
         jLabel1.setText("Articulo:");
 
@@ -70,33 +90,12 @@ public class Agregar extends javax.swing.JFrame {
 
         jLabel4.setText("Banda: ");
 
-        jLabel5.setText("Titulo:");
-
-        jLabel6.setText("Precio:");
-
-        jLabel7.setText("Codigo: ");
-
-        jLabel8.setText("Stock Minimo: ");
-
-        jLabel9.setText("Stock a agregar: ");
-
         jButton1.setText("AGREGAR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-
-        jButton2.setText("SALIR");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jLabel10.setText("Tipo:");
-
-        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ROPA", "DISCOS" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -147,12 +146,12 @@ public class Agregar extends javax.swing.JFrame {
                         .addComponent(jButton1)
                         .addGap(106, 106, 106)
                         .addComponent(jButton2)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
+                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(txtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -180,7 +179,7 @@ public class Agregar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -194,7 +193,7 @@ public class Agregar extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
-                .addContainerGap())
+                .addGap(42, 42, 42))
         );
 
         pack();
@@ -204,7 +203,7 @@ public class Agregar extends javax.swing.JFrame {
         this.dispose();
         INVENTARIO obj=new INVENTARIO();
         obj.setVisible(true);
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -221,30 +220,14 @@ public class Agregar extends javax.swing.JFrame {
         if(articulo.equals("") || banda.equals("") || titulo.equals("") || precio.equals("") || codigo.equals("") || stockMin.equals("") || stockMax.equals("")){
             JOptionPane.showMessageDialog(null,"Le hace falta llenar algún campo");
         }else{
-            DBCollection collection = db.getCollection("productos");
-            BasicDBObject document = new BasicDBObject();
-            document.put("Articulo",articulo.toUpperCase());
-            document.put("Color",color.toUpperCase());
-            document.put("Genero",genero.toUpperCase());
-            document.put("Banda",banda.toUpperCase());
-            document.put("Titulo",titulo.toUpperCase());
-            document.put("Precio",Float.parseFloat(precio));
-            document.put("Codigo",codigo.toUpperCase());
-            document.put("Tipo",tipo.toUpperCase());
-            
-            BasicDBObject documentDetail = new BasicDBObject();
-            documentDetail.put("StockMinimo",Integer.parseInt(stockMin));
-            documentDetail.put("StockActual",Integer.parseInt(stockMax));
-            document.put("Stock", documentDetail);
-            collection.insert(document);
-            JOptionPane.showMessageDialog(null,"Registro guardado con exito");
+            //Modificaciones para actualizar en las colecciones
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField StockActual;
