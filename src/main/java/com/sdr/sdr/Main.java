@@ -11,7 +11,11 @@ public class Main {
     public static DB db;
     
     public static void main(String[] args) {
-        
+       /* MongoClient conexion = new MongoClient("localhost", 27017);
+
+
+
+        db = conexion.getDB("SDR");*/
         MongoClientURI uri = new MongoClientURI(
             "mongodb://dbUser:PEUgdemRd4M9QCeY@sdr-shard-00-00-6u6yh.mongodb.net:27017,sdr-shard-00-01-6u6yh.mongodb.net:27017,sdr-shard-00-02-6u6yh.mongodb.net:27017/test?ssl=true&replicaSet=SDR-shard-0&authSource=admin&retryWrites=true");
 
@@ -54,11 +58,11 @@ public class Main {
     }
     
     public static DefaultTableModel tabla(){
-        String[] columnNames = {"Articulo", "Descripcion", "StockActual","StockMinimo"};
+        String[] columnNames = {"Articulo", "Descripcion", "StockActual","StockMinimo","Reposicion"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             @Override
             public boolean isCellEditable(int fil, int col) {
-                return col==4;
+                return col==5;
             }
         };
         return model;
