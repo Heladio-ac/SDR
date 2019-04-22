@@ -271,7 +271,7 @@ try
       String desc=color+","+banda+","+Tipo+tama+","+titulo;
 
      BasicDBObject qty = (BasicDBObject) obj.get("Stock");
-                Object  cantidad = (Object) qty.get("StockActual");
+                Object  cantidad = (Object) qty.get("StockMaximo");
                 Object  cantidad1 = (Object) qty.get("StockMinimo");
              
       
@@ -297,12 +297,13 @@ try
            }
       table.setModel(model);
       color c = new color(4);
-      table.getColumnModel().getColumn(4).setCellRenderer(new color(4));
+      //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
+     /* table.getColumnModel().getColumn(3).setCellRenderer(new color(4));
       table.getColumnModel().getColumn(0).setPreferredWidth(20);
       table.getColumnModel().getColumn(1).setPreferredWidth(40);
       table.getColumnModel().getColumn(2).setPreferredWidth(20);
       table.getColumnModel().getColumn(3).setPreferredWidth(20);
-      table.getColumnModel().getColumn(4).setPreferredWidth(30);
+      //table.getColumnModel().getColumn(4).setPreferredWidth(30);*/
 } 
 finally 
 {

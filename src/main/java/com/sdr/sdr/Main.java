@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         
         MongoClientURI uri = new MongoClientURI(
-            "mongodb://dbUser:PEUgdemRd4M9QCeY@sdr-shard-00-00-6u6yh.mongodb.net:27017,sdr-shard-00-01-6u6yh.mongodb.net:27017,sdr-shard-00-02-6u6yh.mongodb.net:27017/test?ssl=true&replicaSet=SDR-shard-0&authSource=admin");
+            "mongodb://dbUser:PEUgdemRd4M9QCeY@sdr-shard-00-00-6u6yh.mongodb.net:27017,sdr-shard-00-01-6u6yh.mongodb.net:27017,sdr-shard-00-02-6u6yh.mongodb.net:27017/test?ssl=true&replicaSet=SDR-shard-0&authSource=admin&retryWrites=true");
 
         MongoClient mongoClient = new MongoClient(uri);
 
@@ -43,12 +43,14 @@ public class Main {
         //</editor-fold>
         //</editor-fold>
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
+        /*java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 new INVENTARIO().setVisible(true);
             }
-        });
+        });*/
+        INVENTARIO ob=new INVENTARIO();
+        ob.setVisible(true);
     }
     
     public static DefaultTableModel tabla(){
