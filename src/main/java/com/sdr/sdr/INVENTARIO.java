@@ -8,7 +8,6 @@ import com.mongodb.MongoException;
 import javax.swing.table.DefaultTableModel;
 import static com.sdr.sdr.Main.db;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 /**
  *
@@ -30,8 +29,6 @@ public class INVENTARIO extends javax.swing.JFrame {
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         bBuscar = new javax.swing.JButton();
         bmostrar = new javax.swing.JButton();
@@ -41,6 +38,8 @@ public class INVENTARIO extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
 
         jMenuItem1.setText("Verificar Si El Inventario es bajo");
         jMenuItem1.setComponentPopupMenu(jPopupMenu1);
@@ -61,21 +60,6 @@ public class INVENTARIO extends javax.swing.JFrame {
         jPopupMenu1.add(jMenuItem2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        table.setAutoCreateRowSorter(true);
-        table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Articulo", "Descripcion", "Cantidad"
-            }
-        ));
-        table.setComponentPopupMenu(jPopupMenu1);
-        jScrollPane1.setViewportView(table);
 
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -124,6 +108,19 @@ public class INVENTARIO extends javax.swing.JFrame {
 
         jButton4.setText("Eliminar producto");
 
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(table);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -133,22 +130,22 @@ public class INVENTARIO extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 383, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(8, 8, 8)
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bBuscar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bmostrar)))
+                                .addComponent(bmostrar))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(70, 70, 70)
+                                .addGap(59, 59, 59)
                                 .addComponent(jButton1))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(37, 37, 37)
+                                .addGap(26, 26, 26)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -162,15 +159,6 @@ public class INVENTARIO extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(bBuscar)
-                            .addComponent(bmostrar))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton3)
@@ -178,7 +166,16 @@ public class INVENTARIO extends javax.swing.JFrame {
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 244, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(bBuscar)
+                            .addComponent(bmostrar))))
+                .addContainerGap())
         );
 
         pack();
@@ -219,7 +216,7 @@ try
                 Object  cantidad1 = (Object) qty.get("StockMinimo");
               int i= (int) cantidad;
               int k= (int) cantidad1;
-       if(i< k){
+       if(i<=k){
             String Stock="Reponer";
             model.addRow(new Object[] { item,desc,cantidad,cantidad1,Stock});
             reponer=false;
@@ -233,11 +230,13 @@ try
    }
       table.setModel(model);
       color c = new color(4);
-      table.getColumnModel().getColumn(4).setCellRenderer(new color(4));
-      table.getColumnModel().getColumn(2).setPreferredWidth(40);
-      table.getColumnModel().getColumn(3).setPreferredWidth(40);
-      table.getColumnModel().getColumn(0).setPreferredWidth(40);
-       table.getColumnModel().getColumn(4).setPreferredWidth(30);
+      //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
+     table.getColumnModel().getColumn(4).setCellRenderer(c);
+      table.getColumnModel().getColumn(0).setPreferredWidth(20);
+      table.getColumnModel().getColumn(1).setPreferredWidth(40);
+      table.getColumnModel().getColumn(2).setPreferredWidth(20);
+      table.getColumnModel().getColumn(3).setPreferredWidth(20);
+      table.getColumnModel().getColumn(4).setPreferredWidth(30);
 
 
   
@@ -271,13 +270,13 @@ try
       String desc=color+","+banda+","+Tipo+tama+","+titulo;
 
      BasicDBObject qty = (BasicDBObject) obj.get("Stock");
-                Object  cantidad = (Object) qty.get("StockMaximo");
+                Object  cantidad = (Object) qty.get("StockActual");
                 Object  cantidad1 = (Object) qty.get("StockMinimo");
              
       
       int i= (int) cantidad;
       int j= (int) cantidad1;
-       if(i< j){
+       if(i<= j){
             String Stock="Reponer";
             model.addRow(new Object[] { item,desc,cantidad,cantidad1,Stock});
             reponer=false;
@@ -298,17 +297,22 @@ try
       table.setModel(model);
       color c = new color(4);
       //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
-     /* table.getColumnModel().getColumn(3).setCellRenderer(new color(4));
+     table.getColumnModel().getColumn(4).setCellRenderer(c);
       table.getColumnModel().getColumn(0).setPreferredWidth(20);
       table.getColumnModel().getColumn(1).setPreferredWidth(40);
       table.getColumnModel().getColumn(2).setPreferredWidth(20);
       table.getColumnModel().getColumn(3).setPreferredWidth(20);
-      //table.getColumnModel().getColumn(4).setPreferredWidth(30);*/
+      table.getColumnModel().getColumn(4).setPreferredWidth(30);
 } 
+catch(Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
 finally 
 {
    cursor.close();
 }
+
     }
     
     private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
@@ -375,8 +379,8 @@ if(t.length()>0)
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPopupMenu jPopupMenu1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
-    public javax.swing.JTable table;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }
