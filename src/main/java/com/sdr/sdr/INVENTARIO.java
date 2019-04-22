@@ -8,6 +8,7 @@ import com.mongodb.MongoException;
 import javax.swing.table.DefaultTableModel;
 import static com.sdr.sdr.Main.db;
 import javax.swing.Icon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 /**
  *
@@ -348,7 +349,7 @@ if(t.length()>0)
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        this.dispose();
-       Agregar obj=new Agregar();
+       JFrame obj=new AgregarFlexible();
        obj.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 

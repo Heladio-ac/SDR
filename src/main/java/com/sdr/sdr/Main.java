@@ -1,9 +1,6 @@
 package com.sdr.sdr;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -67,7 +64,7 @@ public class Main {
     }
     
     public static DefaultTableModel tabla(){
-        String[] columnNames = {"Articulo", "Descripcion", "StockActual","StockMinimo","Reposicion"};
+        String[] columnNames = {"Articulo", "Descripcion", "StockActual", "StockMinimo", "Reposicion"};
         DefaultTableModel model = new DefaultTableModel(columnNames, 0){
             @Override
             public boolean isCellEditable(int fil, int col) {
