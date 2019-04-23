@@ -127,10 +127,9 @@ public class INVENTARIO extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -140,24 +139,26 @@ public class INVENTARIO extends javax.swing.JFrame {
                                 .addComponent(bBuscar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(bmostrar))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 547, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(59, 59, 59)
+                                .addGap(33, 33, 33)
                                 .addComponent(jButton1))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
+                                .addGap(0, 0, 0)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-                .addContainerGap(35, Short.MAX_VALUE))
+                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton2)
@@ -167,7 +168,7 @@ public class INVENTARIO extends javax.swing.JFrame {
                         .addComponent(jButton4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addGap(0, 244, Short.MAX_VALUE))
+                        .addGap(0, 238, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGap(40, 40, 40)
@@ -192,7 +193,7 @@ public class INVENTARIO extends javax.swing.JFrame {
      DBCollection coll =  db.getCollection("productos");
      BasicDBObject filtro = new BasicDBObject(); //si se realiza consulta con foltro se hace este objeto
      String j=jTextField1.getText();
-     filtro=new BasicDBObject("Articulo",new BasicDBObject("$regex",j));//pones el filtro que se requiera
+     filtro=new BasicDBObject("ARTICULO",new BasicDBObject("$regex",j));//pones el filtro que se requiera
      DBCursor cursor = coll.find(filtro);
      DefaultTableModel model= Main.tabla();
      
@@ -205,39 +206,46 @@ try
    {
        
                 DBObject obj = cursor.next();
-      String color = (String)obj.get("Color");
-      String tama = (String)obj.get("Tamaño");
-      String item = (String)obj.get("Articulo");
-      String titulo = (String)obj.get("Titulo"),Tipo=(String)obj.get("Tipo"),banda = (String)obj.get("Banda");
-      String desc=color+","+banda+","+Tipo+tama+","+titulo;
+       
       
-
-     BasicDBObject qty = (BasicDBObject) obj.get("Stock");
-                Object  cantidad = (Object) qty.get("StockActual");
-                Object  cantidad1 = (Object) qty.get("StockMinimo");
-              int i= (int) cantidad;
-              int k= (int) cantidad1;
-       if(i<=k){
+      String item = (String)obj.get("ARTICULO"),Tipo=(String)obj.get("TIPO"),Codigo=(String)obj.get("CODIGO");
+      
+      Object  costoc = (Object) obj.get("COSTO"),costov = (Object) obj.get("PRECIO");
+     
+     BasicDBObject qty = (BasicDBObject) obj.get("STOCK");
+     Object  cantidad = (Object) qty.get("ACTUAL"),cantidad1 = (Object) qty.get("MINIMO");
+     
+              
+       try{
+      double i= (double) cantidad;
+      double k= (double) cantidad1;
+       if(i<= k){
             String Stock="Reponer";
-            model.addRow(new Object[] { item,desc,cantidad,cantidad1,Stock});
+            model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
             reponer=false;
         }
        else
        {
            String Stock="Suficiente";
-            model.addRow(new Object[] { item,desc,cantidad,cantidad1,Stock});
-       }         
+           model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
+       }
+      }
+      catch(Exception e)
+      { 
+          String Stock="Sin Informacion";
+            model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
+      }        
                     
    }
       table.setModel(model);
-      color c = new color(4);
+      color c = new color(5);
       //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
-     table.getColumnModel().getColumn(4).setCellRenderer(c);
-      table.getColumnModel().getColumn(0).setPreferredWidth(20);
-      table.getColumnModel().getColumn(1).setPreferredWidth(40);
+     table.getColumnModel().getColumn(5).setCellRenderer(c);
+      table.getColumnModel().getColumn(0).setPreferredWidth(70);
+      table.getColumnModel().getColumn(1).setPreferredWidth(20);
       table.getColumnModel().getColumn(2).setPreferredWidth(20);
       table.getColumnModel().getColumn(3).setPreferredWidth(20);
-      table.getColumnModel().getColumn(4).setPreferredWidth(30);
+      table.getColumnModel().getColumn(4).setPreferredWidth(40);
 
 
   
@@ -264,30 +272,36 @@ try
    while(cursor.hasNext()) 
    {
       DBObject obj = cursor.next();
-       String color = (String)obj.get("Color");
-      String tama = (String)obj.get("Tamaño");
-      String item = (String)obj.get("Articulo");
-      String titulo = (String)obj.get("Titulo"),Tipo=(String)obj.get("Tipo"),banda = (String)obj.get("Banda");
-      String desc=color+","+banda+","+Tipo+tama+","+titulo;
-
-     BasicDBObject qty = (BasicDBObject) obj.get("Stock");
-                Object  cantidad = (Object) qty.get("StockActual");
-                Object  cantidad1 = (Object) qty.get("StockMinimo");
-             
+       
       
-      int i= (int) cantidad;
-      int j= (int) cantidad1;
-       if(i<= j){
+      String item = (String)obj.get("ARTICULO"),Tipo=(String)obj.get("TIPO"),Codigo=(String)obj.get("CODIGO");
+      
+      Object  costoc = (Object) obj.get("COSTO"),costov = (Object) obj.get("PRECIO");
+     
+     BasicDBObject qty = (BasicDBObject) obj.get("STOCK");
+     Object  cantidad = (Object) qty.get("ACTUAL"),cantidad1 = (Object) qty.get("MINIMO");
+     
+              
+       try
+       {
+      double i= (double) cantidad;
+      double k= (double) cantidad1;
+       if(i<= k){
             String Stock="Reponer";
-            model.addRow(new Object[] { item,desc,cantidad,cantidad1,Stock});
+            model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
             reponer=false;
-        }
+                }
        else
        {
            String Stock="Suficiente";
-            model.addRow(new Object[] { item,desc,cantidad,cantidad1,Stock});
+           model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
        }
-       
+      }
+      catch(Exception e)
+      { 
+          String Stock="Sin Informacion";
+            model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
+      }        
 
    }
    if(reponer==false)
@@ -296,14 +310,14 @@ try
               JOptionPane.showMessageDialog(null, "Atención hay artículos que necesitan reposición","¡¡ATENCIÓN!!",JOptionPane.WARNING_MESSAGE);
            }
       table.setModel(model);
-      color c = new color(4);
+      color c = new color(5);
       //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
-     table.getColumnModel().getColumn(4).setCellRenderer(c);
-      table.getColumnModel().getColumn(0).setPreferredWidth(20);
-      table.getColumnModel().getColumn(1).setPreferredWidth(40);
+     table.getColumnModel().getColumn(5).setCellRenderer(c);
+      table.getColumnModel().getColumn(0).setPreferredWidth(70);
+      table.getColumnModel().getColumn(1).setPreferredWidth(20);
       table.getColumnModel().getColumn(2).setPreferredWidth(20);
       table.getColumnModel().getColumn(3).setPreferredWidth(20);
-      table.getColumnModel().getColumn(4).setPreferredWidth(30);
+      table.getColumnModel().getColumn(4).setPreferredWidth(40);
 } 
 catch(Exception e)
         {

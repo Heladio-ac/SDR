@@ -35,6 +35,10 @@ public class color extends DefaultTableCellRenderer {
                 setBackground(Color.green);
                 setForeground(Color.black);
                 break;
+            case "Sin Informacion":
+            setBackground(Color.ORANGE);
+            setForeground(Color.black);
+                break;
             default:
                 break;
         }
