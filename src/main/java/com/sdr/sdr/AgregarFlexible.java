@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import javax.swing.JOptionPane;
 import static com.sdr.sdr.Main.db;
 
@@ -16,15 +14,7 @@ import static com.sdr.sdr.Main.db;
  * @author Heladio
  */
 public class AgregarFlexible extends javax.swing.JFrame {
-    
-    private static final String REGEX_LINE = "^.+[\n$]";
-    private static final String REGEX_KEY = "^\\w+:";
-    //private static final String REGEX_VALUE = ":\w+\\s*$";
-    
-    public static Pattern LinePattern = Pattern.compile(REGEX_LINE);
-    public static Pattern KeyPattern = Pattern.compile(REGEX_KEY);
-    //public static Pattern ValuePattern = Pattern.compile(REGEX_VALUE);
-    public Matcher matcher;
+
     private Map<String, List<String>> datos;
 
     public AgregarFlexible() {
@@ -47,6 +37,18 @@ public class AgregarFlexible extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TxtInformacion = new javax.swing.JTextArea();
         BtnAceptar = new javax.swing.JButton();
+        TxtCodigo = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        TxtStockMin = new javax.swing.JTextField();
+        TxtTipo = new javax.swing.JTextField();
+        TxtStockActual = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        TxtCosto = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        TxtPrecio = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -65,21 +67,48 @@ public class AgregarFlexible extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Código:");
+
+        jLabel4.setText("Tipo:");
+
+        jLabel5.setText("Stock mínimo:");
+
+        jLabel6.setText("Stock actual:");
+
+        jLabel7.setText("Costo:");
+
+        jLabel8.setText("Precio de venta:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-                            .addComponent(TxtArticulo)))
+                            .addComponent(TxtArticulo)
+                            .addComponent(TxtCodigo)
+                            .addComponent(TxtStockMin)
+                            .addComponent(TxtTipo)
+                            .addComponent(TxtStockActual)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(TxtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel8)
+                                .addGap(10, 10, 10)
+                                .addComponent(TxtPrecio))))
                     .addComponent(BtnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -91,10 +120,32 @@ public class AgregarFlexible extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(TxtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TxtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(TxtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(TxtStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(TxtStockActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(TxtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(TxtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(166, 166, 166)
+                .addGap(18, 18, 18)
                 .addComponent(BtnAceptar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -106,51 +157,74 @@ public class AgregarFlexible extends javax.swing.JFrame {
         if (!valido()) {
             return;
         }
-        String[] keyValue;
-        List<String> values;
         datos = new HashMap<>();
-        //Agregar Datos comunes
-        values = new ArrayList<>(1);
-        values.add(TxtArticulo.getText().trim().toUpperCase());
-        datos.put("ARTICULO", values);
-        //Agregar Datos de información
-        for (String line: TxtInformacion.getText().split("\\R")) {
-            if (!line.contains(":")) {
-                JOptionPane.showMessageDialog(null, "Información redactada incorrectamente\n"
-                        + "Asegúrese de separar las características de su valor\n"
-                        + "Ejemplo 1 - característica : valor\n"
-                        + "Ejemplo 2 - característica : valor, valor, valor, ...", "Atención",
-                        JOptionPane.WARNING_MESSAGE);
-                break;
-            }
-            keyValue = line.split(":");
-            values = new ArrayList<>();
-            if (keyValue[1].contains(",")) {
-                for(String value: keyValue[1].split(",")) {
-                    if (!value.trim().isEmpty()) {
-                        values.add(value.trim().toUpperCase());
-                    }
+        if (!TxtInformacion.getText().isEmpty()) {
+            String[] keyValue;
+            List<String> values;
+            datos = new HashMap<>();
+            //Agregar Datos de información
+            for (String line : TxtInformacion.getText().split("\\R")) {
+                if (!line.contains(":")) {
+                    JOptionPane.showMessageDialog(null, "Información redactada incorrectamente\n"
+                            + "Asegúrese de separar las características de su valor\n"
+                            + "Ejemplo 1 - característica : valor\n"
+                            + "Ejemplo 2 - característica : valor, valor, valor, ...", "Atención",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
                 }
-            } else if (!keyValue[1].trim().isEmpty()) {
-                values.add(keyValue[1].trim().toUpperCase());
+                keyValue = line.split(":");
+                values = new ArrayList<>();
+                if (keyValue[1].contains(",")) {
+                    for (String value : keyValue[1].split(",")) {
+                        if (!value.trim().isEmpty()) {
+                            values.add(value.trim().toUpperCase());
+                        }
+                    }
+                } else if (!keyValue[1].trim().isEmpty()) {
+                    values.add(keyValue[1].trim().toUpperCase());
+                }
+                datos.put(keyValue[0].trim().toUpperCase(), values);
             }
-            datos.put(keyValue[0].trim().toUpperCase(), values);
         }
         agregar(datos);
+        this.dispose();
+        INVENTARIO obj = new INVENTARIO();
+        obj.setVisible(true);
     }//GEN-LAST:event_BtnAceptarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAceptar;
     private javax.swing.JTextField TxtArticulo;
+    private javax.swing.JTextField TxtCodigo;
+    private javax.swing.JTextField TxtCosto;
     private javax.swing.JTextArea TxtInformacion;
+    private javax.swing.JTextField TxtPrecio;
+    private javax.swing.JTextField TxtStockActual;
+    private javax.swing.JTextField TxtStockMin;
+    private javax.swing.JTextField TxtTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
     private void agregar(Map<String, List<String>> datos) {
         BasicDBObject documento = new BasicDBObject();
+        documento.put("ARTICULO", TxtArticulo.getText().trim().toUpperCase());
+        documento.put("CODIGO", TxtCodigo.getText().trim().toUpperCase());
+        documento.put("TIPO", TxtTipo.getText().trim().toUpperCase());
+        documento.put("PRECIO", Double.parseDouble(TxtPrecio.getText()));
+        documento.put("COSTO", Double.parseDouble(TxtCosto.getText()));
+        BasicDBObject stock = new BasicDBObject();
+        stock.put("MINIMO", Double.parseDouble(TxtStockMin.getText()));
+        stock.put("ACTUAL", Double.parseDouble(TxtStockActual.getText()));
+        documento.put("STOCK", stock);
         datos.forEach((key, values) -> {
             if (values.size() == 1) {
                 documento.put(key, values.get(0));
@@ -161,9 +235,35 @@ public class AgregarFlexible extends javax.swing.JFrame {
             }
         });
         db.getCollection("productos").insert(documento);
+        JOptionPane.showMessageDialog(null, "Producto registrado exitosamente");
+
     }
 
     private boolean valido() {
+        if (TxtArticulo.getText().isEmpty()
+                || TxtCodigo.getText().isEmpty()
+                || TxtTipo.getText().isEmpty()
+                || TxtStockMin.getText().isEmpty()
+                || TxtStockActual.getText().isEmpty()
+                || TxtCosto.getText().isEmpty()
+                || TxtPrecio.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Registre la información necesaria");
+            return false;
+        } else {
+            try {
+                double costo = Double.parseDouble(TxtCosto.getText());
+                double precio = Double.parseDouble(TxtPrecio.getText());
+                double minimo = Double.parseDouble(TxtStockMin.getText());
+                double actual = Double.parseDouble(TxtStockActual.getText());
+                if (costo < 0 || precio < 0 || minimo < 0 || actual < 0) {
+                    JOptionPane.showMessageDialog(null, "Introduzca valores válidos para precio, costo y stock");
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Introduzca valores válidos para precio, costo y stock");
+                return false;
+            }
+        }
         return true;
     }
 }
