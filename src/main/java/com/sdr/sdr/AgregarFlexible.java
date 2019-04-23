@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import static com.sdr.sdr.Main.db;
+import java.awt.event.KeyEvent;
 
 /**
  *
@@ -75,9 +76,33 @@ public class AgregarFlexible extends javax.swing.JFrame {
 
         jLabel6.setText("Stock actual:");
 
+        TxtStockMin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtStockMinKeyTyped(evt);
+            }
+        });
+
+        TxtStockActual.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtStockActualKeyTyped(evt);
+            }
+        });
+
         jLabel7.setText("Costo:");
 
+        TxtCosto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtCostoKeyTyped(evt);
+            }
+        });
+
         jLabel8.setText("Precio de venta:");
+
+        TxtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtPrecioKeyTyped(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -191,6 +216,42 @@ public class AgregarFlexible extends javax.swing.JFrame {
         INVENTARIO obj = new INVENTARIO();
         obj.setVisible(true);
     }//GEN-LAST:event_BtnAceptarActionPerformed
+
+    private void TxtStockMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtStockMinKeyTyped
+        char caracter=evt.getKeyChar();
+        if(caracter<'0' || caracter>'9'){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_TxtStockMinKeyTyped
+
+    private void TxtStockActualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtStockActualKeyTyped
+        char caracter=evt.getKeyChar();
+        if(caracter<'0' || caracter>'9'){
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_TxtStockActualKeyTyped
+
+    private void TxtCostoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCostoKeyTyped
+      char caracter=evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9')) 
+        && (caracter != KeyEvent.VK_BACK_SPACE)
+        && (caracter != '.' || TxtCosto.getText().contains(".")) ) {
+            evt.consume();
+            getToolkit().beep();
+}
+    }//GEN-LAST:event_TxtCostoKeyTyped
+
+    private void TxtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtPrecioKeyTyped
+        char caracter=evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9')) 
+        && (caracter != KeyEvent.VK_BACK_SPACE)
+        && (caracter != '.' || TxtPrecio.getText().contains(".")) ) {
+            evt.consume();
+            getToolkit().beep();
+        }
+    }//GEN-LAST:event_TxtPrecioKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
