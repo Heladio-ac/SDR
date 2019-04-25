@@ -10,19 +10,22 @@ import static com.sdr.sdr.Main.db;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
 /**
  *
  * @author david
  */
 public class INVENTARIO extends javax.swing.JFrame {
+
     Icon modificar;
- public boolean reponer=true;
+    public boolean reponer = true;
+
     public INVENTARIO() {
         initComponents();
         llenar();
         setLocationRelativeTo(null);
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -111,13 +114,13 @@ public class INVENTARIO extends javax.swing.JFrame {
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         jScrollPane2.setViewportView(table);
@@ -144,12 +147,10 @@ public class INVENTARIO extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(33, 33, 33)
                                 .addComponent(jButton1))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, 0)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -183,177 +184,137 @@ public class INVENTARIO extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-    
-    public void busca(){
-    
-       
-        
-    //Metodo para hacer busquedas
-     DBCollection coll =  db.getCollection("productos");
-     BasicDBObject filtro = new BasicDBObject(); //si se realiza consulta con foltro se hace este objeto
-     String j=jTextField1.getText();
-     filtro=new BasicDBObject("ARTICULO",new BasicDBObject("$regex",j));//pones el filtro que se requiera
-     DBCursor cursor = coll.find(filtro);
-     DefaultTableModel model= Main.tabla();
-     
-     
-try 
-{
-    
-       
-   while(cursor.hasNext()) 
-   {
-       
+    public void busca() {
+
+        //Metodo para hacer busquedas
+        DBCollection coll = db.getCollection("productos");
+        BasicDBObject filtro = new BasicDBObject(); //si se realiza consulta con foltro se hace este objeto
+        String j = jTextField1.getText();
+        filtro = new BasicDBObject("ARTICULO", new BasicDBObject("$regex", j));//pones el filtro que se requiera
+        DBCursor cursor = coll.find(filtro);
+        DefaultTableModel model = Main.tabla();
+
+        try {
+
+            while (cursor.hasNext()) {
+
                 DBObject obj = cursor.next();
-       
-      
-      String item = (String)obj.get("ARTICULO"),Tipo=(String)obj.get("TIPO"),Codigo=(String)obj.get("CODIGO");
-      
-      Object  costoc = (Object) obj.get("COSTO"),costov = (Object) obj.get("PRECIO");
-     
-     BasicDBObject qty = (BasicDBObject) obj.get("STOCK");
-     Object  cantidad = (Object) qty.get("ACTUAL"),cantidad1 = (Object) qty.get("MINIMO");
-     
-              
-       try{
-      double i= (double) cantidad;
-      double k= (double) cantidad1;
-       if(i<= k){
-            String Stock="Reponer";
-            model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
-            reponer=false;
+
+                String item = (String) obj.get("ARTICULO"), Tipo = (String) obj.get("TIPO"), Codigo = (String) obj.get("CODIGO");
+
+                Object costoc = (Object) obj.get("COSTO"), costov = (Object) obj.get("PRECIO");
+
+                BasicDBObject qty = (BasicDBObject) obj.get("STOCK");
+                Object cantidad = (Object) qty.get("ACTUAL"), cantidad1 = (Object) qty.get("MINIMO");
+
+                try {
+                    double i = (double) cantidad;
+                    double k = (double) cantidad1;
+                    if (i <= k) {
+                        String Stock = "Reponer";
+                        model.addRow(new Object[]{item, Codigo, Tipo, costoc, costov, Stock});
+                        reponer = false;
+                    } else {
+                        String Stock = "Suficiente";
+                        model.addRow(new Object[]{item, Codigo, Tipo, costoc, costov, Stock});
+                    }
+                } catch (Exception e) {
+                    String Stock = "Sin Informacion";
+                    model.addRow(new Object[]{item, Codigo, Tipo, costoc, costov, Stock});
+                }
+
+            }
+            table.setModel(model);
+            color c = new color(5);
+            //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
+            table.getColumnModel().getColumn(5).setCellRenderer(c);
+            table.getColumnModel().getColumn(0).setPreferredWidth(70);
+            table.getColumnModel().getColumn(1).setPreferredWidth(20);
+            table.getColumnModel().getColumn(2).setPreferredWidth(20);
+            table.getColumnModel().getColumn(3).setPreferredWidth(20);
+            table.getColumnModel().getColumn(4).setPreferredWidth(40);
+
+        } catch (MongoException e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
         }
-       else
-       {
-           String Stock="Suficiente";
-           model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
-       }
-      }
-      catch(Exception e)
-      { 
-          String Stock="Sin Informacion";
-            model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
-      }        
-                    
-   }
-      table.setModel(model);
-      color c = new color(5);
-      //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
-     table.getColumnModel().getColumn(5).setCellRenderer(c);
-      table.getColumnModel().getColumn(0).setPreferredWidth(70);
-      table.getColumnModel().getColumn(1).setPreferredWidth(20);
-      table.getColumnModel().getColumn(2).setPreferredWidth(20);
-      table.getColumnModel().getColumn(3).setPreferredWidth(20);
-      table.getColumnModel().getColumn(4).setPreferredWidth(40);
+    }
 
+    public void llenar() {
 
-  
-      
-}
-catch(MongoException e)
-{   e.printStackTrace();}
-
-finally 
-{
-   cursor.close();
-}
-}
-    
-    public void llenar ()
-    {
-        
         DBCollection coll = (DBCollection) db.getCollection("productos");
         DBCursor cursor = coll.find();
-        DefaultTableModel model= Main.tabla();
-        
-try 
-{
-   while(cursor.hasNext()) 
-   {
-      DBObject obj = cursor.next();
-       
-      
-      String item = (String)obj.get("ARTICULO"),Tipo=(String)obj.get("TIPO"),Codigo=(String)obj.get("CODIGO");
-      
-      Object  costoc = (Object) obj.get("COSTO"),costov = (Object) obj.get("PRECIO");
-     
-     BasicDBObject qty = (BasicDBObject) obj.get("STOCK");
-     Object  cantidad = (Object) qty.get("ACTUAL"),cantidad1 = (Object) qty.get("MINIMO");
-     
-              
-       try
-       {
-      double i= (double) cantidad;
-      double k= (double) cantidad1;
-       if(i<= k){
-            String Stock="Reponer";
-            model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
-            reponer=false;
-                }
-       else
-       {
-           String Stock="Suficiente";
-           model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
-       }
-      }
-      catch(Exception e)
-      { 
-          String Stock="Sin Informacion";
-            model.addRow(new Object[] { item,Codigo,Tipo,costoc,costov,Stock});
-      }        
+        DefaultTableModel model = Main.tabla();
 
-   }
-   if(reponer==false)
-           {
-               
-              JOptionPane.showMessageDialog(null, "Atención hay artículos que necesitan reposición","¡¡ATENCIÓN!!",JOptionPane.WARNING_MESSAGE);
-           }
-      table.setModel(model);
-      color c = new color(5);
-      //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
-     table.getColumnModel().getColumn(5).setCellRenderer(c);
-      table.getColumnModel().getColumn(0).setPreferredWidth(70);
-      table.getColumnModel().getColumn(1).setPreferredWidth(20);
-      table.getColumnModel().getColumn(2).setPreferredWidth(20);
-      table.getColumnModel().getColumn(3).setPreferredWidth(20);
-      table.getColumnModel().getColumn(4).setPreferredWidth(40);
-} 
-catch(Exception e)
-        {
-            System.out.println(e.getMessage());
+        try {
+            while (cursor.hasNext()) {
+                DBObject obj = cursor.next();
+
+                String item = (String) obj.get("ARTICULO"), Tipo = (String) obj.get("TIPO"), Codigo = (String) obj.get("CODIGO");
+
+                Object costoc = (Object) obj.get("COSTO"), costov = (Object) obj.get("PRECIO");
+
+                BasicDBObject qty = (BasicDBObject) obj.get("STOCK");
+                Object cantidad = (Object) qty.get("ACTUAL"), cantidad1 = (Object) qty.get("MINIMO");
+
+                try {
+                    double i = (double) cantidad;
+                    double k = (double) cantidad1;
+                    if (i <= k) {
+                        String Stock = "Reponer";
+                        model.addRow(new Object[]{item, Codigo, Tipo, costoc, costov, Stock});
+                        reponer = false;
+                    } else {
+                        String Stock = "Suficiente";
+                        model.addRow(new Object[]{item, Codigo, Tipo, costoc, costov, Stock});
+                    }
+                } catch (Exception e) {
+                    String Stock = "Sin Informacion";
+                    model.addRow(new Object[]{item, Codigo, Tipo, costoc, costov, Stock});
+                }
+
+            }
+            if (reponer == false) {
+
+                JOptionPane.showMessageDialog(null, "Atención hay artículos que necesitan reposición", "¡¡ATENCIÓN!!", JOptionPane.WARNING_MESSAGE);
+            }
+            table.setModel(model);
+            color c = new color(5);
+            //Esre bloque de comentarios hace que sucedan algunos errores y hace que no cargue bien la interfaz
+            table.getColumnModel().getColumn(5).setCellRenderer(c);
+            table.getColumnModel().getColumn(0).setPreferredWidth(70);
+            table.getColumnModel().getColumn(1).setPreferredWidth(20);
+            table.getColumnModel().getColumn(2).setPreferredWidth(20);
+            table.getColumnModel().getColumn(3).setPreferredWidth(20);
+            table.getColumnModel().getColumn(4).setPreferredWidth(40);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
         }
-finally 
-{
-   cursor.close();
-}
 
     }
-    
+
     private void bBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bBuscarActionPerformed
-     busca();
+        busca();
     }//GEN-LAST:event_bBuscarActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-     Agregar c= new Agregar();
-     c.setVisible(true);
-     dispose();    // TODO add your handling code here:
+        Agregar c = new Agregar();
+        c.setVisible(true);
+        dispose();    // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void bmostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bmostrarActionPerformed
-       llenar(); // TODO add your handling code here:
+        llenar(); // TODO add your handling code here:
     }//GEN-LAST:event_bmostrarActionPerformed
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-        if(!Character.isLetter(evt.getKeyChar())) 
-        evt.consume();
-        String t=jTextField1.getText();
-if(t.length()>0)
-{
-    char prim=t.charAt(0);
-    t=Character.toUpperCase(prim)+t.substring(1,t.length());
-    jTextField1.setText(t);
-}
+        if (!Character.isLetter(evt.getKeyChar())) {
+            evt.consume();
+        }
+        jTextField1.setText(jTextField1.getText().toUpperCase());
         busca();
     }//GEN-LAST:event_jTextField1KeyReleased
 
@@ -362,17 +323,17 @@ if(t.length()>0)
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       this.dispose();
-       JFrame obj=new AgregarFlexible();
-       obj.setVisible(true);
+        this.dispose();
+        JFrame obj = new AgregarFlexible();
+        obj.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
-/*String t=jTextField1.getText();
+        /*String t=jTextField1.getText();
 if(t.length()>0)
 {
     char prim=t.charAt(0);

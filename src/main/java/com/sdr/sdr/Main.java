@@ -11,24 +11,14 @@ public class Main {
     public static DB db;
     
     public static void main(String[] args) {
-       /* MongoClient conexion = new MongoClient("localhost", 27017);
-
-
-
-        db = conexion.getDB("SDR");*/
+       
         MongoClientURI uri = new MongoClientURI(
             "mongodb://dbUser:PEUgdemRd4M9QCeY@sdr-shard-00-00-6u6yh.mongodb.net:27017,sdr-shard-00-01-6u6yh.mongodb.net:27017,sdr-shard-00-02-6u6yh.mongodb.net:27017/test?ssl=true&replicaSet=SDR-shard-0&authSource=admin&retryWrites=true");
 
         MongoClient mongoClient = new MongoClient(uri);
 
         db = mongoClient.getDB("SDR");
-      
-     /*DBCollection coll = (DBCollection) db.getCollection("productos");
-        DBCursor cursor = coll.find();
-     while(cursor.hasNext()) 
-   {
-      System.out.println(""+cursor.next());
-   }*/
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -53,12 +43,6 @@ public class Main {
         //</editor-fold>
         //</editor-fold>
 
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new INVENTARIO().setVisible(true);
-            }
-        });*/
         INVENTARIO ob=new INVENTARIO();
         ob.setVisible(true);
     }
@@ -73,5 +57,4 @@ public class Main {
         };
         return model;
     }
-    
 }
