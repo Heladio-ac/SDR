@@ -1,7 +1,10 @@
 package com.sdr.sdr;
 
+import com.mongodb.AggregationOptions;
+import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +12,9 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import static com.sdr.sdr.Main.db;
 import java.awt.event.KeyEvent;
+import java.util.Arrays;
+import org.bson.Document;
+
 
 /**
  *
@@ -21,6 +27,7 @@ public class AgregarFlexible extends javax.swing.JFrame {
     public AgregarFlexible() {
         initComponents();
         setLocationRelativeTo(null);
+        //limpiar(datos);
     }
 
     /**
@@ -238,6 +245,7 @@ public class AgregarFlexible extends javax.swing.JFrame {
                 datos.put(keyValue[0].trim().toUpperCase(), values);
             }
         }
+        limpiar(datos);
         agregar(datos);
         this.dispose();
         INVENTARIO obj = new INVENTARIO();
@@ -245,49 +253,49 @@ public class AgregarFlexible extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnAceptarActionPerformed
 
     private void TxtStockMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtStockMinKeyTyped
-        char caracter=evt.getKeyChar();
-        if(caracter<'0' || caracter>'9'){
+        char caracter = evt.getKeyChar();
+        if (caracter < '0' || caracter > '9') {
             getToolkit().beep();
             evt.consume();
         }
     }//GEN-LAST:event_TxtStockMinKeyTyped
 
     private void TxtStockActualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtStockActualKeyTyped
-        char caracter=evt.getKeyChar();
-        if(caracter<'0' || caracter>'9'){
+        char caracter = evt.getKeyChar();
+        if (caracter < '0' || caracter > '9') {
             getToolkit().beep();
             evt.consume();
         }
     }//GEN-LAST:event_TxtStockActualKeyTyped
 
     private void TxtCostoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCostoKeyTyped
-      char caracter=evt.getKeyChar();
-        if (((caracter < '0') || (caracter > '9')) 
-        && (caracter != KeyEvent.VK_BACK_SPACE)
-        && (caracter != '.' || TxtCosto.getText().contains(".")) ) {
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9'))
+                && (caracter != KeyEvent.VK_BACK_SPACE)
+                && (caracter != '.' || TxtCosto.getText().contains("."))) {
             evt.consume();
             getToolkit().beep();
-}
+        }
     }//GEN-LAST:event_TxtCostoKeyTyped
 
     private void TxtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtPrecioKeyTyped
-        char caracter=evt.getKeyChar();
-        if (((caracter < '0') || (caracter > '9')) 
-        && (caracter != KeyEvent.VK_BACK_SPACE)
-        && (caracter != '.' || TxtPrecio.getText().contains(".")) ) {
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9'))
+                && (caracter != KeyEvent.VK_BACK_SPACE)
+                && (caracter != '.' || TxtPrecio.getText().contains("."))) {
             evt.consume();
             getToolkit().beep();
         }
     }//GEN-LAST:event_TxtPrecioKeyTyped
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-System.exit(0);        // TODO add your handling code here:
+        System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-     INVENTARIO c= new INVENTARIO();
-     c.setVisible(true);
-     this.dispose(); // TODO add your handling code here:
+        INVENTARIO c = new INVENTARIO();
+        c.setVisible(true);
+        this.dispose(); // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -365,5 +373,27 @@ System.exit(0);        // TODO add your handling code here:
             }
         }
         return true;
+    }
+
+    private void limpiar(Map<String, List<String>> datos) {
+        //Ajustar llaves para coincidir con llaves existentes
+        //Obtener los campos existentes
+        DBCollection productos = db.getCollection("productos");
+        AggregationOutput resultado = productos.aggregate(Arrays.asList(
+                new BasicDBObject("$project", new BasicDBObject("keyValues", new BasicDBObject("$objectToArray", "$$ROOT"))),   //{$project: {"keyValues": {"$objectToArray": "$$ROOT"}}}
+                new BasicDBObject("$unwind", "$keyValues"),                                                                     //{$unwind: "$keyValues"}
+                new BasicDBObject("$group", new BasicDBObject("_id", 1)                                                         //{$group: {_id: 1, "keys": {$addToSet: "$keyValues.k"}}}
+                    .append("keys", new BasicDBObject("$addToSet", "$keyValues.k"))),                                           //{$unwind: "$keys"}
+                new BasicDBObject("$unwind", "$keys")
+        ));
+        //Pinchi Mongo :c que pide un cursor o no sé qué pedo
+        List<String> keys = new ArrayList<>();
+        for (Object doc: resultado.results()) {
+            Document documento = (Document) doc;
+            keys.add((String) documento.get("keys"));
+        }
+        System.out.println(keys.toString());
+        //Calcular distancia de Levenshtein
+        //Cambiar llaves que se encuentren a una determinada distancia de las llaves existentes
     }
 }
