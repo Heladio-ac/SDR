@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import static com.sdr.sdr.Main.db;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import org.bson.Document;
 import org.springframework.cache.annotation.Cacheable;
@@ -248,7 +249,7 @@ public class Agregar extends javax.swing.JFrame {
             }
         }
         limpiar(datos);
-        //agregar(datos);
+        agregar(datos);
         this.dispose();
         INVENTARIO obj = new INVENTARIO();
         obj.setVisible(true);
@@ -394,18 +395,27 @@ public class Agregar extends javax.swing.JFrame {
         }
         //Calcular distancia de Levenshtein
         Iterator newKeys = datos.keySet().iterator();
-        int[][] distancias = new int[datos.size()][keys.size()];
+        int distancia;
+        Map<String, String> cambios = new HashMap<>();
         int i = 0;
         String newKey;
         while (newKeys.hasNext()) {
             newKey = (String)newKeys.next();
             for (int j = 0; j < keys.size(); j++) {
-                distancias[i][j] = Levenshtein(newKey, keys.get(j));
+                distancia = Levenshtein(newKey, keys.get(j));
+                if (distancia > 0 && distancia < 3) {
+                    //Almacenar los posibles errores con su candidato
+                    cambios.put(newKey, keys.get(j));
+                }
                 //System.out.println(newKey + " - " + keys.get(j) + " = " + distancias[i][j]);
             }
             i++;
         }
         //Cambiar llaves que se encuentren a una determinada distancia de las llaves existentes
+        cambios.forEach((nuevo, correcto) -> {
+            //Posiblemente preguntar por cada incidencia para evitar errores
+            datos.put(correcto, datos.remove(nuevo));
+        });
     }
 
     @Cacheable("distances")
