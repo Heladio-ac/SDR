@@ -1,6 +1,6 @@
 package com.sdr.sdr;
 
-import com.mongodb.DB;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class Main {
     
-    public static DB db;
+    public static MongoDatabase db;
     
     public static void main(String[] args) {
        
@@ -17,7 +17,7 @@ public class Main {
 
         MongoClient mongoClient = new MongoClient(uri);
 
-        db = mongoClient.getDB("SDR");
+        db = mongoClient.getDatabase("SDR");
         
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

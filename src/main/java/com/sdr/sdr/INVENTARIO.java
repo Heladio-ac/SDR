@@ -1,15 +1,14 @@
 package com.sdr.sdr;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.mongodb.MongoException;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import javax.swing.table.DefaultTableModel;
 import static com.sdr.sdr.Main.db;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.bson.Document;
 
 /**
  *
@@ -109,8 +108,18 @@ public class INVENTARIO extends javax.swing.JFrame {
         jLabel2.setText("INVENTARIO");
 
         jButton3.setText("Modificar Producto");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Eliminar producto");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -187,24 +196,24 @@ public class INVENTARIO extends javax.swing.JFrame {
     public void busca() {
 
         //Metodo para hacer busquedas
-        DBCollection coll = db.getCollection("productos");
-        BasicDBObject filtro = new BasicDBObject(); //si se realiza consulta con foltro se hace este objeto
+        MongoCollection<Document> coll = db.getCollection("productos");
+        Document filtro = new Document(); //si se realiza consulta con foltro se hace este objeto
         String j = jTextField1.getText();
-        filtro = new BasicDBObject("ARTICULO", new BasicDBObject("$regex", j));//pones el filtro que se requiera
-        DBCursor cursor = coll.find(filtro);
+        filtro = new Document("ARTICULO", new Document("$regex", j));//pones el filtro que se requiera
+        MongoCursor<Document> cursor = coll.find(filtro).iterator();
         DefaultTableModel model = Main.tabla();
 
         try {
 
             while (cursor.hasNext()) {
 
-                DBObject obj = cursor.next();
+                Document doc = cursor.next();
 
-                String item = (String) obj.get("ARTICULO"), Tipo = (String) obj.get("TIPO"), Codigo = (String) obj.get("CODIGO");
+                String item = (String) doc.get("ARTICULO"), Tipo = (String) doc.get("TIPO"), Codigo = (String) doc.get("CODIGO");
 
-                Object costoc = (Object) obj.get("COSTO"), costov = (Object) obj.get("PRECIO");
+                Object costoc = (Object) doc.get("COSTO"), costov = (Object) doc.get("PRECIO");
 
-                BasicDBObject qty = (BasicDBObject) obj.get("STOCK");
+                Document qty = (Document) doc.get("STOCK");
                 Object cantidad = (Object) qty.get("ACTUAL"), cantidad1 = (Object) qty.get("MINIMO");
 
                 try {
@@ -243,19 +252,19 @@ public class INVENTARIO extends javax.swing.JFrame {
 
     public void llenar() {
 
-        DBCollection coll = (DBCollection) db.getCollection("productos");
-        DBCursor cursor = coll.find();
+        MongoCollection<Document> coll = db.getCollection("productos");
+        MongoCursor<Document> cursor = coll.find().iterator();
         DefaultTableModel model = Main.tabla();
 
         try {
             while (cursor.hasNext()) {
-                DBObject obj = cursor.next();
+                Document doc = cursor.next();
 
-                String item = (String) obj.get("ARTICULO"), Tipo = (String) obj.get("TIPO"), Codigo = (String) obj.get("CODIGO");
+                String item = (String) doc.get("ARTICULO"), Tipo = (String) doc.get("TIPO"), Codigo = (String) doc.get("CODIGO");
 
-                Object costoc = (Object) obj.get("COSTO"), costov = (Object) obj.get("PRECIO");
+                Object costoc = (Object) doc.get("COSTO"), costov = (Object) doc.get("PRECIO");
 
-                BasicDBObject qty = (BasicDBObject) obj.get("STOCK");
+                Document qty = (Document) doc.get("STOCK");
                 Object cantidad = (Object) qty.get("ACTUAL"), cantidad1 = (Object) qty.get("MINIMO");
 
                 try {
@@ -324,7 +333,7 @@ public class INVENTARIO extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.dispose();
-        JFrame obj = new AgregarFlexible();
+        JFrame obj = new Agregar();
         obj.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -341,6 +350,14 @@ if(t.length()>0)
     jTextField1.setText(t);
 }*/// TODO add your handling code here:
     }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

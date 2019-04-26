@@ -1,27 +1,33 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.sdr.sdr;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCollection;
+import com.mongodb.BasicDBList;
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Aggregates.*;
+import static com.mongodb.client.model.Accumulators.addToSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import static com.sdr.sdr.Main.db;
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
+import org.bson.Document;
+
 
 /**
  *
- * @author berna
+ * @author Heladio
  */
 public class Agregar extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Agregar
-     */
+    private Map<String, List<String>> datos;
+
     public Agregar() {
         initComponents();
         setLocationRelativeTo(null);
+        limpiar(datos);
     }
 
     /**
@@ -34,228 +40,278 @@ public class Agregar extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        txtArticulo = new javax.swing.JTextField();
+        TxtArticulo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        comboColor = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        TxtInformacion = new javax.swing.JTextArea();
+        BtnAceptar = new javax.swing.JButton();
+        TxtCodigo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        comboGenero = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        txtBanda = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtTitulo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtPrecio = new javax.swing.JTextField();
+        TxtStockMin = new javax.swing.JTextField();
+        TxtTipo = new javax.swing.JTextField();
+        TxtStockActual = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        txtCodigo = new javax.swing.JTextField();
+        TxtCosto = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        StockMinimo = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        StockActual = new javax.swing.JTextField();
+        TxtPrecio = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        comboTipo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Articulo:");
+        jLabel1.setText("Artículo:");
 
-        jLabel2.setText("Color:");
+        jLabel2.setText("Información:");
 
-        comboColor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NEGRO", "BLANCO", "AMARILLO", "ROJO", "AZUL" }));
+        TxtInformacion.setColumns(20);
+        TxtInformacion.setRows(5);
+        jScrollPane1.setViewportView(TxtInformacion);
 
-        jLabel3.setText("Genero:");
+        BtnAceptar.setText("Aceptar");
+        BtnAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAceptarActionPerformed(evt);
+            }
+        });
 
-        comboGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ROCK", "METAL" }));
+        jLabel3.setText("Código:");
 
-        jLabel4.setText("Banda: ");
+        jLabel4.setText("Tipo:");
 
-        jLabel5.setText("Titulo:");
+        jLabel5.setText("Stock mínimo:");
 
-        jLabel6.setText("Precio:");
+        jLabel6.setText("Stock actual:");
 
-        jLabel7.setText("Codigo: ");
+        TxtStockMin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtStockMinKeyTyped(evt);
+            }
+        });
 
-        jLabel8.setText("Stock Minimo: ");
+        TxtStockActual.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtStockActualKeyTyped(evt);
+            }
+        });
 
-        jLabel9.setText("Stock a agregar: ");
+        jLabel7.setText("Costo:");
 
-        jButton1.setText("AGREGAR");
+        TxtCosto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtCostoKeyTyped(evt);
+            }
+        });
+
+        jLabel8.setText("Precio de venta:");
+
+        TxtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtPrecioKeyTyped(evt);
+            }
+        });
+
+        jButton1.setText("Salir");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("SALIR");
+        jButton2.setText("Atras");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jLabel10.setText("Tipo:");
-
-        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ROPA", "DISCOS" }));
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addGap(47, 47, 47)
-                                    .addComponent(comboColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
+                            .addComponent(TxtArticulo)
+                            .addComponent(TxtCodigo)
+                            .addComponent(TxtStockMin)
+                            .addComponent(TxtTipo)
+                            .addComponent(TxtStockActual)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(StockMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(TxtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(StockActual, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel10))
-                                .addGap(34, 34, 34)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtBanda)
-                                    .addComponent(txtTitulo)
-                                    .addComponent(txtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-                                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jLabel8)
+                                .addGap(10, 10, 10)
+                                .addComponent(TxtPrecio))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)
-                        .addGap(106, 106, 106)
-                        .addComponent(jButton2)))
-                .addContainerGap(34, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(BtnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                    .addComponent(TxtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(comboColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
+                    .addComponent(TxtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(txtBanda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
+                    .addComponent(TxtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                    .addComponent(TxtStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                    .addComponent(TxtStockActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TxtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(StockMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(StockActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(71, 71, 71)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(TxtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(BtnAceptar)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void BtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAceptarActionPerformed
+        if (!valido()) {
+            return;
+        }
+        datos = new HashMap<>();
+        if (!TxtInformacion.getText().isEmpty()) {
+            String[] keyValue;
+            List<String> values;
+            datos = new HashMap<>();
+            //Agregar Datos de información
+            for (String line : TxtInformacion.getText().split("\\R")) {
+                if (!line.contains(":")) {
+                    JOptionPane.showMessageDialog(null, "Información redactada incorrectamente\n"
+                            + "Asegúrese de separar las características de su valor\n"
+                            + "Ejemplo 1 - característica : valor\n"
+                            + "Ejemplo 2 - característica : valor, valor, valor, ...", "Atención",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                keyValue = line.split(":");
+                values = new ArrayList<>();
+                if (keyValue[1].contains(",")) {
+                    for (String value : keyValue[1].split(",")) {
+                        if (!value.trim().isEmpty()) {
+                            values.add(value.trim().toUpperCase());
+                        }
+                    }
+                } else if (!keyValue[1].trim().isEmpty()) {
+                    values.add(keyValue[1].trim().toUpperCase());
+                }
+                datos.put(keyValue[0].trim().toUpperCase(), values);
+            }
+        }
+        limpiar(datos);
+        agregar(datos);
         this.dispose();
-        INVENTARIO obj=new INVENTARIO();
+        INVENTARIO obj = new INVENTARIO();
         obj.setVisible(true);
-        
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_BtnAceptarActionPerformed
+
+    private void TxtStockMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtStockMinKeyTyped
+        char caracter = evt.getKeyChar();
+        if (caracter < '0' || caracter > '9') {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_TxtStockMinKeyTyped
+
+    private void TxtStockActualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtStockActualKeyTyped
+        char caracter = evt.getKeyChar();
+        if (caracter < '0' || caracter > '9') {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_TxtStockActualKeyTyped
+
+    private void TxtCostoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCostoKeyTyped
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9'))
+                && (caracter != KeyEvent.VK_BACK_SPACE)
+                && (caracter != '.' || TxtCosto.getText().contains("."))) {
+            evt.consume();
+            getToolkit().beep();
+        }
+    }//GEN-LAST:event_TxtCostoKeyTyped
+
+    private void TxtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtPrecioKeyTyped
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9'))
+                && (caracter != KeyEvent.VK_BACK_SPACE)
+                && (caracter != '.' || TxtPrecio.getText().contains("."))) {
+            evt.consume();
+            getToolkit().beep();
+        }
+    }//GEN-LAST:event_TxtPrecioKeyTyped
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String articulo=txtArticulo.getText();
-        String color=comboColor.getSelectedItem().toString();
-        String genero=comboGenero.getSelectedItem().toString();
-        String banda=txtBanda.getText();
-        String titulo=txtTitulo.getText();
-        String precio=txtPrecio.getText();
-        String codigo=txtCodigo.getText();
-        String stockMin=StockMinimo.getText();
-        String stockMax=StockActual.getText();
-        String tipo=comboTipo.getSelectedItem().toString();
-        if(articulo.equals("") || banda.equals("") || titulo.equals("") || precio.equals("") || codigo.equals("") || stockMin.equals("") || stockMax.equals("")){
-            JOptionPane.showMessageDialog(null,"Le hace falta llenar algún campo");
-        }else{
-            DBCollection collection = db.getCollection("productos");
-            BasicDBObject document = new BasicDBObject();
-            document.put("Articulo",articulo.toUpperCase());
-            document.put("Color",color.toUpperCase());
-            document.put("Genero",genero.toUpperCase());
-            document.put("Banda",banda.toUpperCase());
-            document.put("Titulo",titulo.toUpperCase());
-            document.put("Precio",Float.parseFloat(precio));
-            document.put("Codigo",codigo.toUpperCase());
-            document.put("Tipo",tipo.toUpperCase());
-            
-            BasicDBObject documentDetail = new BasicDBObject();
-            documentDetail.put("StockMinimo",Integer.parseInt(stockMin));
-            documentDetail.put("StockActual",Integer.parseInt(stockMax));
-            document.put("Stock", documentDetail);
-            collection.insert(document);
-            JOptionPane.showMessageDialog(null,"Registro guardado con exito");
-        }
+        System.exit(0);        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        INVENTARIO c = new INVENTARIO();
+        c.setVisible(true);
+        this.dispose(); // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField StockActual;
-    private javax.swing.JTextField StockMinimo;
-    private javax.swing.JComboBox<String> comboColor;
-    private javax.swing.JComboBox<String> comboGenero;
-    private javax.swing.JComboBox<String> comboTipo;
+    private javax.swing.JButton BtnAceptar;
+    private javax.swing.JTextField TxtArticulo;
+    private javax.swing.JTextField TxtCodigo;
+    private javax.swing.JTextField TxtCosto;
+    private javax.swing.JTextArea TxtInformacion;
+    private javax.swing.JTextField TxtPrecio;
+    private javax.swing.JTextField TxtStockActual;
+    private javax.swing.JTextField TxtStockMin;
+    private javax.swing.JTextField TxtTipo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -263,11 +319,79 @@ public class Agregar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField txtArticulo;
-    private javax.swing.JTextField txtBanda;
-    private javax.swing.JTextField txtCodigo;
-    private javax.swing.JTextField txtPrecio;
-    private javax.swing.JTextField txtTitulo;
+    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    private void agregar(Map<String, List<String>> datos) {
+        Document documento = new Document();
+        documento.put("ARTICULO", TxtArticulo.getText().trim().toUpperCase());
+        documento.put("CODIGO", TxtCodigo.getText().trim().toUpperCase());
+        documento.put("TIPO", TxtTipo.getText().trim().toUpperCase());
+        documento.put("PRECIO", Double.parseDouble(TxtPrecio.getText()));
+        documento.put("COSTO", Double.parseDouble(TxtCosto.getText()));
+        Document stock = new Document();
+        stock.put("MINIMO", Double.parseDouble(TxtStockMin.getText()));
+        stock.put("ACTUAL", Double.parseDouble(TxtStockActual.getText()));
+        documento.put("STOCK", stock);
+        datos.forEach((key, values) -> {
+            if (values.size() == 1) {
+                documento.put(key, values.get(0));
+            } else {
+                BasicDBList lista = new BasicDBList();
+                lista.addAll(values);
+                documento.put(key, lista);
+            }
+        });
+        db.getCollection("productos").insertOne(documento);
+        JOptionPane.showMessageDialog(null, "Producto registrado exitosamente");
+
+    }
+
+    private boolean valido() {
+        if (TxtArticulo.getText().isEmpty()
+                || TxtCodigo.getText().isEmpty()
+                || TxtTipo.getText().isEmpty()
+                || TxtStockMin.getText().isEmpty()
+                || TxtStockActual.getText().isEmpty()
+                || TxtCosto.getText().isEmpty()
+                || TxtPrecio.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Registre la información necesaria");
+            return false;
+        } else {
+            try {
+                double costo = Double.parseDouble(TxtCosto.getText());
+                double precio = Double.parseDouble(TxtPrecio.getText());
+                double minimo = Double.parseDouble(TxtStockMin.getText());
+                double actual = Double.parseDouble(TxtStockActual.getText());
+                if (costo < 0 || precio < 0 || minimo < 0 || actual < 0) {
+                    JOptionPane.showMessageDialog(null, "Introduzca valores válidos para precio, costo y stock");
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Introduzca valores válidos para precio, costo y stock");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void limpiar(Map<String, List<String>> datos) {
+        //Ajustar llaves para coincidir con llaves existentes
+        //Obtener los campos existentes
+        MongoCollection<Document> productos = db.getCollection("productos");
+        
+        AggregateIterable<Document> resultado = productos.aggregate(Arrays.asList(
+                project(new Document("keyValues", new Document("$objectToArray", "$$ROOT"))),
+                unwind("$keyValues"),
+                group(null, addToSet("keys", "$keyValues.k")),
+                unwind("$keys")
+        ));
+        List<String> keys = new ArrayList<>();
+        for (Document doc: resultado) {
+            keys.add((String) doc.get("keys"));
+        }
+        System.out.println(keys.toString());
+        //Calcular distancia de Levenshtein
+        //Cambiar llaves que se encuentren a una determinada distancia de las llaves existentes
+    }
 }
