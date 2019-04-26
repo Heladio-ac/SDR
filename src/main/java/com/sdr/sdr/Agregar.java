@@ -412,9 +412,11 @@ public class Agregar extends javax.swing.JFrame {
             i++;
         }
         //Cambiar llaves que se encuentren a una determinada distancia de las llaves existentes
+        boolean confirmacion;
         cambios.forEach((nuevo, correcto) -> {
-            //Posiblemente preguntar por cada incidencia para evitar errores
-            datos.put(correcto, datos.remove(nuevo));
+            if (JOptionPane.showConfirmDialog (null, "Usted escribió: " + nuevo + "\n¿No quiso decir \"" + correcto + "\"?") == JOptionPane.YES_OPTION) {
+                datos.put(correcto, datos.remove(nuevo));
+            }
         });
     }
 
