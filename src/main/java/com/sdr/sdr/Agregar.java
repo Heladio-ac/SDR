@@ -6,14 +6,16 @@ import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Accumulators.addToSet;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import static com.sdr.sdr.Main.db;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
+import java.util.Iterator;
 import org.bson.Document;
+import org.springframework.cache.annotation.Cacheable;
 
 
 /**
@@ -27,7 +29,6 @@ public class Agregar extends javax.swing.JFrame {
     public Agregar() {
         initComponents();
         setLocationRelativeTo(null);
-        limpiar(datos);
     }
 
     /**
@@ -216,11 +217,12 @@ public class Agregar extends javax.swing.JFrame {
         if (!valido()) {
             return;
         }
-        datos = new HashMap<>();
+        //Se emplea un LinkedHashMap porque tiene un comportamiento predecible al iterar sobre él
+        datos = new LinkedHashMap<>();
         if (!TxtInformacion.getText().isEmpty()) {
             String[] keyValue;
             List<String> values;
-            datos = new HashMap<>();
+            datos = new LinkedHashMap<>();
             //Agregar Datos de información
             for (String line : TxtInformacion.getText().split("\\R")) {
                 if (!line.contains(":")) {
@@ -246,7 +248,7 @@ public class Agregar extends javax.swing.JFrame {
             }
         }
         limpiar(datos);
-        agregar(datos);
+        //agregar(datos);
         this.dispose();
         INVENTARIO obj = new INVENTARIO();
         obj.setVisible(true);
@@ -390,8 +392,51 @@ public class Agregar extends javax.swing.JFrame {
         for (Document doc: resultado) {
             keys.add((String) doc.get("keys"));
         }
-        System.out.println(keys.toString());
         //Calcular distancia de Levenshtein
+        Iterator newKeys = datos.keySet().iterator();
+        int[][] distancias = new int[datos.size()][keys.size()];
+        int i = 0;
+        String newKey;
+        while (newKeys.hasNext()) {
+            newKey = (String)newKeys.next();
+            for (int j = 0; j < keys.size(); j++) {
+                distancias[i][j] = Levenshtein(newKey, keys.get(j));
+                //System.out.println(newKey + " - " + keys.get(j) + " = " + distancias[i][j]);
+            }
+            i++;
+        }
         //Cambiar llaves que se encuentren a una determinada distancia de las llaves existentes
+    }
+
+    @Cacheable("distances")
+    public static int Levenshtein(String a, String b) {
+        int Na = a.length();
+        int Nb = b.length();
+        int[][] d = new int[Na + 1][Nb + 1];
+        
+        for (int i = 1; i <= Na; i++) {
+            d[i][0] = i;
+        }
+        for (int j = 1; j <= Nb; j++) {
+            d[0][j] = j;
+        }
+        int costo;
+        for (int j = 1; j <= Nb; j++) {
+            for (int i = 1; i <= Na; i++) {
+                if (a.charAt(i-1) == b.charAt(j-1)) {
+                    costo = 0;
+                } else {
+                    costo = 1;
+                }
+                d[i][j] = min(d[i-1][j] + 1,
+                              d[i][j-1] + 1,
+                              d[i-1][j-1] + costo);
+            }
+        }
+        return d[Na][Nb];
+    }
+    
+    public static int min(int a, int b, int c) {
+        return Math.min(Math.min(a,b),c);
     }
 }
