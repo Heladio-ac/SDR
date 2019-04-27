@@ -6,7 +6,6 @@ import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Accumulators.addToSet;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -14,16 +13,16 @@ import static com.sdr.sdr.Main.db;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import org.bson.Document;
 import org.springframework.cache.annotation.Cacheable;
-
 
 /**
  *
  * @author Heladio
  */
 public class Agregar extends javax.swing.JFrame {
+
+    public static final int TOLERANCIA = 2;
 
     private Map<String, List<String>> datos;
 
@@ -218,12 +217,11 @@ public class Agregar extends javax.swing.JFrame {
         if (!valido()) {
             return;
         }
-        //Se emplea un LinkedHashMap porque tiene un comportamiento predecible al iterar sobre él
-        datos = new LinkedHashMap<>();
+        datos = new HashMap<>();
         if (!TxtInformacion.getText().isEmpty()) {
             String[] keyValue;
             List<String> values;
-            datos = new LinkedHashMap<>();
+            datos = new HashMap<>();
             //Agregar Datos de información
             for (String line : TxtInformacion.getText().split("\\R")) {
                 if (!line.contains(":")) {
@@ -382,7 +380,6 @@ public class Agregar extends javax.swing.JFrame {
         //Ajustar llaves para coincidir con llaves existentes
         //Obtener los campos existentes
         MongoCollection<Document> productos = db.getCollection("productos");
-        
         AggregateIterable<Document> resultado = productos.aggregate(Arrays.asList(
                 project(new Document("keyValues", new Document("$objectToArray", "$$ROOT"))),
                 unwind("$keyValues"),
@@ -390,31 +387,28 @@ public class Agregar extends javax.swing.JFrame {
                 unwind("$keys")
         ));
         List<String> keys = new ArrayList<>();
-        for (Document doc: resultado) {
-            keys.add((String) doc.get("keys"));
+        for (Document doc : resultado) {
+            String key = (String) doc.get("keys");
+            if (!key.equals("_id")) {
+                keys.add((String) doc.get("keys"));
+            }
         }
         //Calcular distancia de Levenshtein
-        Iterator newKeys = datos.keySet().iterator();
-        int distancia;
         Map<String, String> cambios = new HashMap<>();
-        int i = 0;
-        String newKey;
-        while (newKeys.hasNext()) {
-            newKey = (String)newKeys.next();
-            for (int j = 0; j < keys.size(); j++) {
-                distancia = Levenshtein(newKey, keys.get(j));
-                if (distancia > 0 && distancia < 3) {
+        datos.forEach((llaveNueva, valor) -> {
+            keys.forEach(llave -> {
+                int distancia = Levenshtein(llaveNueva, llave);
+                if (distancia > 0 && distancia <= TOLERANCIA) {
                     //Almacenar los posibles errores con su candidato
-                    cambios.put(newKey, keys.get(j));
+                    cambios.put(llaveNueva, llave);
                 }
-                //System.out.println(newKey + " - " + keys.get(j) + " = " + distancias[i][j]);
-            }
-            i++;
-        }
+            });
+        });
         //Cambiar llaves que se encuentren a una determinada distancia de las llaves existentes
-        boolean confirmacion;
         cambios.forEach((nuevo, correcto) -> {
-            if (JOptionPane.showConfirmDialog (null, "Usted escribió: " + nuevo + "\n¿No quiso decir \"" + correcto + "\"?") == JOptionPane.YES_OPTION) {
+            //Preguntar por cada posible intercambio para evitar errores
+            if (JOptionPane.showConfirmDialog(null, "Usted escribió: " + nuevo
+                    + "\n¿No quiso decir \"" + correcto + "\"?") == JOptionPane.YES_OPTION) {
                 datos.put(correcto, datos.remove(nuevo));
             }
         });
@@ -425,7 +419,7 @@ public class Agregar extends javax.swing.JFrame {
         int Na = a.length();
         int Nb = b.length();
         int[][] d = new int[Na + 1][Nb + 1];
-        
+
         for (int i = 1; i <= Na; i++) {
             d[i][0] = i;
         }
@@ -435,20 +429,20 @@ public class Agregar extends javax.swing.JFrame {
         int costo;
         for (int j = 1; j <= Nb; j++) {
             for (int i = 1; i <= Na; i++) {
-                if (a.charAt(i-1) == b.charAt(j-1)) {
+                if (a.charAt(i - 1) == b.charAt(j - 1)) {
                     costo = 0;
                 } else {
                     costo = 1;
                 }
-                d[i][j] = min(d[i-1][j] + 1,
-                              d[i][j-1] + 1,
-                              d[i-1][j-1] + costo);
+                d[i][j] = min(d[i - 1][j] + 1,
+                        d[i][j - 1] + 1,
+                        d[i - 1][j - 1] + costo);
             }
         }
         return d[Na][Nb];
     }
-    
+
     public static int min(int a, int b, int c) {
-        return Math.min(Math.min(a,b),c);
+        return Math.min(Math.min(a, b), c);
     }
 }
