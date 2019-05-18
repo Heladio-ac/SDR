@@ -5,10 +5,20 @@
  */
 package com.sdr.sdr;
 
-import com.mongodb.BasicDBObject;
+
+import com.mongodb.Block;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import static com.sdr.sdr.Main.db;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.bson.Document;
+
 
 /**
  *
@@ -19,8 +29,43 @@ public class Actualizar extends javax.swing.JFrame {
     /**
      * Creates new form Actualizar
      */
-    public Actualizar() {
+    public Actualizar(String codigo) {
         initComponents();
+        setLocationRelativeTo(null);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                INVENTARIO n = new INVENTARIO();
+                n.setVisible(true);
+            }
+        });
+        recuperarDatos(codigo);
+    }
+
+    void recuperarDatos(String codigo) {
+        FindIterable<Document> iterable = db.getCollection("productos").find(new Document("CODIGO",codigo));
+        // Iterate the results and apply a block to each resulting document.
+        // Iteramos los resultados y aplicacimos un bloque para cada documento.
+        iterable.forEach(new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                TxtArticulo.setText((String) document.get("ARTICULO"));
+                TxtTipo.setText((String) document.get("TIPO"));
+                
+                Document qty =(Document) document.get("STOCK");
+                double min=(double) qty.get("MINIMO");
+                int minimo=(int)min;
+                double act=(double) qty.get("ACTUAL");
+                int actual=(int)act;
+                TxtStockMin.setText(""+minimo);
+                TxtStockActual.setText(""+actual);
+                
+                double costo=(double)document.get("COSTO");
+                double precio=(double)document.get("PRECIO");
+                TxtCosto.setText(""+costo);
+                TxtPrecio.setText(""+precio);
+            }
+        });
     }
 
     /**
@@ -32,68 +77,62 @@ public class Actualizar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel5 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        txtTitulo = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        comboTipo = new javax.swing.JComboBox<>();
-        txtPrecio = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
-        txtCodigo = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        StockMinimo = new javax.swing.JTextField();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        txtArticulo = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
-        comboColor = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        comboGenero = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        StockActual = new javax.swing.JTextField();
-        txtBanda = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        TxtStockMin = new javax.swing.JTextField();
+        TxtArticulo = new javax.swing.JTextField();
+        TxtTipo = new javax.swing.JTextField();
+        TxtStockActual = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        TxtCosto = new javax.swing.JTextField();
+        BtnAceptar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        TxtPrecio = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel5.setText("Titulo:");
+        jLabel4.setText("Tipo:");
 
-        jButton2.setText("SALIR");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+        jLabel5.setText("Stock mínimo:");
+
+        jLabel6.setText("Stock actual:");
+
+        jLabel1.setText("Artículo:");
+
+        TxtStockMin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtStockMinKeyTyped(evt);
             }
         });
 
-        jLabel10.setText("Tipo:");
+        TxtStockActual.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtStockActualKeyTyped(evt);
+            }
+        });
 
-        jLabel6.setText("Precio:");
+        jLabel7.setText("Costo:");
 
-        comboTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ROPA", "DISCOS" }));
+        TxtCosto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtCostoKeyTyped(evt);
+            }
+        });
 
-        jLabel7.setText("Codigo: ");
-
-        jLabel8.setText("Stock Minimo: ");
-
-        jLabel9.setText("Stock a agregar: ");
-
-        jLabel1.setText("Articulo:");
-
-        jLabel2.setText("Color:");
-
-        comboColor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NEGRO", "BLANCO", "AMARILLO", "ROJO", "AZUL" }));
-
-        jLabel3.setText("Genero:");
-
-        comboGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ROCK", "METAL" }));
-
-        jLabel4.setText("Banda: ");
-
-        jButton1.setText("AGREGAR");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        BtnAceptar.setText("Aceptar");
+        BtnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                BtnAceptarActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setText("Precio de venta:");
+
+        TxtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TxtPrecioKeyTyped(evt);
             }
         });
 
@@ -102,155 +141,124 @@ public class Actualizar extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addGap(47, 47, 47)
-                                    .addComponent(comboColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(StockMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(StockActual, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel10))
-                                .addGap(34, 34, 34)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtBanda)
-                                    .addComponent(txtTitulo)
-                                    .addComponent(txtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
-                                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(97, 97, 97)
-                        .addComponent(jButton1)
-                        .addGap(106, 106, 106)
-                        .addComponent(jButton2)))
+                .addGap(52, 52, 52)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(TxtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TxtStockMin)
+                            .addComponent(TxtTipo)
+                            .addComponent(TxtStockActual)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(TxtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel8)
+                                .addGap(10, 10, 10)
+                                .addComponent(TxtPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))))
+                    .addComponent(BtnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                    .addComponent(TxtArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(comboColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(txtBanda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
+                    .addComponent(TxtTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(txtTitulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36)
+                    .addComponent(TxtStockMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
+                    .addComponent(TxtStockActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(comboTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TxtCosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8)
-                    .addComponent(StockMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(StockActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(71, 71, 71)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(42, 42, 42))
+                    .addComponent(TxtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(BtnAceptar)
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        this.dispose();
-        INVENTARIO obj=new INVENTARIO();
-        obj.setVisible(true);
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String articulo=txtArticulo.getText();
-        String color=comboColor.getSelectedItem().toString();
-        String genero=comboGenero.getSelectedItem().toString();
-        String banda=txtBanda.getText();
-        String titulo=txtTitulo.getText();
-        String precio=txtPrecio.getText();
-        String codigo=txtCodigo.getText();
-        String stockMin=StockMinimo.getText();
-        String stockMax=StockActual.getText();
-        String tipo=comboTipo.getSelectedItem().toString();
-        if(articulo.equals("") || banda.equals("") || titulo.equals("") || precio.equals("") || codigo.equals("") || stockMin.equals("") || stockMax.equals("")){
-            JOptionPane.showMessageDialog(null,"Le hace falta llenar algún campo");
-        }else{
-            //Modificaciones para actualizar en las colecciones
+    private void TxtStockMinKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtStockMinKeyTyped
+        char caracter = evt.getKeyChar();
+        if (caracter < '0' || caracter > '9') {
+            getToolkit().beep();
+            evt.consume();
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_TxtStockMinKeyTyped
+
+    private void TxtStockActualKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtStockActualKeyTyped
+        char caracter = evt.getKeyChar();
+        if (caracter < '0' || caracter > '9') {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_TxtStockActualKeyTyped
+
+    private void TxtCostoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtCostoKeyTyped
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9'))
+                && (caracter != KeyEvent.VK_BACK_SPACE)
+                && (caracter != '.' || TxtCosto.getText().contains("."))) {
+            evt.consume();
+            getToolkit().beep();
+        }
+    }//GEN-LAST:event_TxtCostoKeyTyped
+
+    private void BtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAceptarActionPerformed
+
+    }//GEN-LAST:event_BtnAceptarActionPerformed
+
+    private void TxtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtPrecioKeyTyped
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0') || (caracter > '9'))
+                && (caracter != KeyEvent.VK_BACK_SPACE)
+                && (caracter != '.' || TxtPrecio.getText().contains("."))) {
+            evt.consume();
+            getToolkit().beep();
+        }
+    }//GEN-LAST:event_TxtPrecioKeyTyped
 
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField StockActual;
-    private javax.swing.JTextField StockMinimo;
-    private javax.swing.JComboBox<String> comboColor;
-    private javax.swing.JComboBox<String> comboGenero;
-    private javax.swing.JComboBox<String> comboTipo;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton BtnAceptar;
+    private javax.swing.JTextField TxtArticulo;
+    private javax.swing.JTextField TxtCosto;
+    private javax.swing.JTextField TxtPrecio;
+    private javax.swing.JTextField TxtStockActual;
+    private javax.swing.JTextField TxtStockMin;
+    private javax.swing.JTextField TxtTipo;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField txtArticulo;
-    private javax.swing.JTextField txtBanda;
-    private javax.swing.JTextField txtCodigo;
-    private javax.swing.JTextField txtPrecio;
-    private javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables
 }

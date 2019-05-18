@@ -352,7 +352,11 @@ if(t.length()>0)
     }//GEN-LAST:event_jTextField1KeyTyped
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+       int row = table.getSelectedRow();
+       String codigo=table.getValueAt(row,1).toString();
+       Actualizar obj=new Actualizar(codigo);
+       obj.setVisible(true);
+       this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
