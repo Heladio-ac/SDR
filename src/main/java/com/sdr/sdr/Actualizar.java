@@ -5,12 +5,15 @@
  */
 package com.sdr.sdr;
 
-
+import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.WriteResult;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import static com.sdr.sdr.Main.db;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -18,7 +21,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.bson.Document;
-
+import org.bson.conversions.Bson;
 
 /**
  *
@@ -29,6 +32,7 @@ public class Actualizar extends javax.swing.JFrame {
     /**
      * Creates new form Actualizar
      */
+    String codigo;
     public Actualizar(String codigo) {
         initComponents();
         setLocationRelativeTo(null);
@@ -39,11 +43,12 @@ public class Actualizar extends javax.swing.JFrame {
                 n.setVisible(true);
             }
         });
+        this.codigo=codigo;
         recuperarDatos(codigo);
     }
 
     void recuperarDatos(String codigo) {
-        FindIterable<Document> iterable = db.getCollection("productos").find(new Document("CODIGO",codigo));
+        FindIterable<Document> iterable = db.getCollection("productos").find(new Document("CODIGO", codigo));
         // Iterate the results and apply a block to each resulting document.
         // Iteramos los resultados y aplicacimos un bloque para cada documento.
         iterable.forEach(new Block<Document>() {
@@ -51,19 +56,19 @@ public class Actualizar extends javax.swing.JFrame {
             public void apply(final Document document) {
                 TxtArticulo.setText((String) document.get("ARTICULO"));
                 TxtTipo.setText((String) document.get("TIPO"));
-                
-                Document qty =(Document) document.get("STOCK");
-                double min=(double) qty.get("MINIMO");
-                int minimo=(int)min;
-                double act=(double) qty.get("ACTUAL");
-                int actual=(int)act;
-                TxtStockMin.setText(""+minimo);
-                TxtStockActual.setText(""+actual);
-                
-                double costo=(double)document.get("COSTO");
-                double precio=(double)document.get("PRECIO");
-                TxtCosto.setText(""+costo);
-                TxtPrecio.setText(""+precio);
+
+                Document qty = (Document) document.get("STOCK");
+                double min = (double) qty.get("MINIMO");
+                int minimo = (int) min;
+                double act = (double) qty.get("ACTUAL");
+                int actual = (int) act;
+                TxtStockMin.setText("" + minimo);
+                TxtStockActual.setText("" + actual);
+
+                double costo = (double) document.get("COSTO");
+                double precio = (double) document.get("PRECIO");
+                TxtCosto.setText("" + costo);
+                TxtPrecio.setText("" + precio);
             }
         });
     }
@@ -229,7 +234,24 @@ public class Actualizar extends javax.swing.JFrame {
     }//GEN-LAST:event_TxtCostoKeyTyped
 
     private void BtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAceptarActionPerformed
-
+    if (!valido()) {
+            return;
+        }
+        MongoCollection<Document> collection = db.getCollection("productos");
+               double costo = Double.parseDouble(TxtCosto.getText());
+                double precio = Double.parseDouble(TxtPrecio.getText());
+                double minimo = Double.parseDouble(TxtStockMin.getText());
+                double actual = Double.parseDouble(TxtStockActual.getText());     
+               collection.updateOne(Filters.eq("CODIGO",this.codigo),Updates.set("TIPO",TxtTipo.getText().toUpperCase()));
+               collection.updateOne(Filters.eq("CODIGO",this.codigo),Updates.set("ARTICULO",TxtArticulo.getText().toUpperCase()));
+               collection.updateOne(Filters.eq("CODIGO",this.codigo),Updates.set("COSTO",costo));
+               collection.updateOne(Filters.eq("CODIGO",this.codigo),Updates.set("PRECIO",precio));
+               collection.updateOne(Filters.eq("CODIGO",this.codigo),Updates.set("STOCK.MINIMO",minimo));
+               collection.updateOne(Filters.eq("CODIGO",this.codigo),Updates.set("STOCK.ACTUAL",actual));
+        JOptionPane.showMessageDialog(null,"Registro actualizado");
+        this.dispose();
+        INVENTARIO n=new INVENTARIO();
+        n.setVisible(true);
     }//GEN-LAST:event_BtnAceptarActionPerformed
 
     private void TxtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TxtPrecioKeyTyped
@@ -261,4 +283,35 @@ public class Actualizar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     // End of variables declaration//GEN-END:variables
+
+
+private boolean valido() {
+        if (TxtArticulo.getText().isEmpty()
+                || TxtTipo.getText().isEmpty()
+                || TxtStockMin.getText().isEmpty()
+                || TxtStockActual.getText().isEmpty()
+                || TxtCosto.getText().isEmpty()
+                || TxtPrecio.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Registre la información necesaria");
+            return false;
+        } else {
+            try {
+                double costo = Double.parseDouble(TxtCosto.getText());
+                double precio = Double.parseDouble(TxtPrecio.getText());
+                double minimo = Double.parseDouble(TxtStockMin.getText());
+                double actual = Double.parseDouble(TxtStockActual.getText());
+                if (costo < 0 || precio < 0 || minimo < 0 || actual < 0) {
+                    JOptionPane.showMessageDialog(null, "Introduzca valores válidos para precio, costo y stock");
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Introduzca valores válidos para precio, costo y stock");
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
 }
