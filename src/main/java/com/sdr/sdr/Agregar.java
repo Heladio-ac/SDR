@@ -156,13 +156,13 @@ public class Agregar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-public Image getIconImage() {
+/*public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().
                 getImage(ClassLoader.getSystemResource("Media/flame.png"));
 
 
         return retValue;
-}
+}*/
     private void BtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAceptarActionPerformed
         if (!valido()) {
             return;

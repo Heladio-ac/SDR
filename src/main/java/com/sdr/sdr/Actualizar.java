@@ -74,13 +74,13 @@ public class Actualizar extends javax.swing.JFrame {
                 TxtCosto.setText("" + costo);
                 TxtPrecio.setText("" + precio);
             }
-              public Image getIconImage() {
+              /*public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().
                 getImage(ClassLoader.getSystemResource("Media/flame.png"));
 
 
         return retValue;
-    }
+    }*/
         });
     }
 

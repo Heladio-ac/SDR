@@ -212,13 +212,13 @@ public class INVENTARIO extends javax.swing.JFrame {
             cursor.close();
         }
     }
-    public Image getIconImage() {
+    /*public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().
                 getImage(ClassLoader.getSystemResource("Media/flame.png"));
 
 
         return retValue;
-    }
+    }*/
 
     public void llenar() {
 
