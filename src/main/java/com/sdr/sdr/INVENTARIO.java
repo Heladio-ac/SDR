@@ -213,6 +213,7 @@ public class INVENTARIO extends javax.swing.JFrame {
             cursor.close();
         }
     }
+
     /*public Image getIconImage() {
         Image retValue = Toolkit.getDefaultToolkit().
                 getImage(ClassLoader.getSystemResource("Media/flame.png"));
@@ -220,7 +221,6 @@ public class INVENTARIO extends javax.swing.JFrame {
 
         return retValue;
     }*/
-
     public void llenar() {
 
         MongoCollection<Document> coll = db.getCollection("productos");
@@ -323,15 +323,37 @@ if(t.length()>0)
     }//GEN-LAST:event_jTextField1KeyTyped
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       int row = table.getSelectedRow();
-       String codigo=table.getValueAt(row,1).toString();
-       Actualizar obj=new Actualizar(codigo);
-       obj.setVisible(true);
-       this.dispose();
+        try {
+            int row = table.getSelectedRow();
+            String codigo = table.getValueAt(row, 1).toString();
+            Actualizar obj = new Actualizar(codigo);
+            obj.setVisible(true);
+            this.dispose();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Selecciona una fila de la tabla porfavor", "ERROR !!!!", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+
+        try {
+            int row = table.getSelectedRow();
+            String codigo = table.getValueAt(row, 1).toString();
+            int resp = JOptionPane.showConfirmDialog(null, "¿Seguro que desea eliminar este productos?", "PREGUNTA", JOptionPane.YES_NO_OPTION);
+            if (JOptionPane.OK_OPTION == resp) {
+                MongoCollection<Document> collection = db.getCollection("productos");
+                Document findDocument = new Document("CODIGO", codigo);
+                collection.findOneAndDelete(findDocument);
+                JOptionPane.showMessageDialog(null, "Producto eliminado");
+                llenar();
+            } else {
+
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Selecciona una fila de la tabla porfavor", "ERROR !!!!", JOptionPane.ERROR_MESSAGE);
+        }
+
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
 
