@@ -5,25 +5,18 @@
  */
 package com.sdr.sdr;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.WriteResult;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import static com.sdr.sdr.Main.db;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 /**
  *
@@ -175,7 +168,7 @@ public class Actualizar extends javax.swing.JFrame {
         jLabel2.setText("ACTUALIZAR");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 180, 30));
 
-        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/SDR.png"))); // NOI18N
+        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SDR.png"))); // NOI18N
         getContentPane().add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 400));
 
         pack();

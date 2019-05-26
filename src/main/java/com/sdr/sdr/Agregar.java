@@ -151,7 +151,7 @@ public class Agregar extends javax.swing.JFrame {
         jLabel10.setText("AGREGAR");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 130, 30));
 
-        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/SDR3.png"))); // NOI18N
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SDR3.png"))); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 560));
 
         pack();

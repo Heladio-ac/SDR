@@ -5,8 +5,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import javax.swing.table.DefaultTableModel;
 import static com.sdr.sdr.Main.db;
-import java.awt.Image;
-import java.awt.Toolkit;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+import javax.swing.ImageIcon;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -150,7 +151,7 @@ public class INVENTARIO extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 57, 547, 285));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/SDR2.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SDR2.png"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 400));
 
         pack();

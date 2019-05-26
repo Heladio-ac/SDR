@@ -153,7 +153,7 @@ public class Ventas extends javax.swing.JFrame {
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 290, -1, -1));
         getContentPane().add(jTextField11, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 290, 40, 20));
 
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Media/sdr5.png"))); // NOI18N
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sdr5.png"))); // NOI18N
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 540));
 
         pack();

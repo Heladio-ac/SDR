@@ -11,7 +11,7 @@ public class Main {
     public static MongoDatabase db;
     
     public static void main(String[] args) {
-       
+        
         MongoClientURI uri = new MongoClientURI(
             "mongodb://dbUser:PEUgdemRd4M9QCeY@sdr-shard-00-00-6u6yh.mongodb.net:27017,sdr-shard-00-01-6u6yh.mongodb.net:27017,sdr-shard-00-02-6u6yh.mongodb.net:27017/test?ssl=true&replicaSet=SDR-shard-0&authSource=admin&retryWrites=true");
 
@@ -42,7 +42,7 @@ public class Main {
         }
         //</editor-fold>
         //</editor-fold>
-
+        
         INVENTARIO ob=new INVENTARIO();
         ob.setVisible(true);
     }
