@@ -17,6 +17,7 @@ import static com.sdr.sdr.Main.db;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -301,7 +302,7 @@ public void llenar() {
             
             recuperarDatos(codigo);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Selecciona una fila de la tabla porfavor", "ERROR !!!!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Selecciona una fila de la tabla por favor", "ERROR !!!!", JOptionPane.ERROR_MESSAGE);
         } 
        txtcantidad.setText("");
        txttotal.setText("");
@@ -345,7 +346,7 @@ char caracter = evt.getKeyChar();
     }//GEN-LAST:event_txtcantidadKeyTyped
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        if(txtproducto.getText()=="")
+        if("".equals(txtproducto.getText()))
         {
             JOptionPane.showMessageDialog(null, "Seleccione un producto de la tabla para poder realizar la venta");
         }
@@ -354,7 +355,6 @@ char caracter = evt.getKeyChar();
         MongoCollection<Document> collection = db.getCollection("productos");
         double actual =Double.parseDouble(txtactual.getText());
         double cantidad =Double.parseDouble(txtcantidad.getText());
-        String date="Date()";
         Document documento = new Document();
         documento.put("Cantidad", txtproducto.getText().trim().toUpperCase());
         documento.put("Codigo", txtcodigo.getText().trim().toUpperCase());
@@ -363,7 +363,7 @@ char caracter = evt.getKeyChar();
         movimiento.put("Salida", 0.0);
         documento.put("TotalMercancia", Double.parseDouble(txtcantidad.getText()));
         documento.put("TotalPrecio", Double.parseDouble(txttotal.getText()));
-        documento.put("FechaMov", date);
+        documento.put("FechaMov", new Date());
         documento.put("TipoMov", movimiento);
         db.getCollection("movimientos").insertOne(documento);
         collection.updateOne(Filters.eq("CODIGO",txtcodigo.getText()),Updates.set("STOCK.ACTUAL",actual-=cantidad));
