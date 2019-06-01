@@ -15,6 +15,9 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import static com.sdr.sdr.Main.db;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.bson.Document;
@@ -31,8 +34,15 @@ public double precio;
     public Ventas() {
         initComponents();
         setLocationRelativeTo(null);
-        llenar();
-        
+
+        setLocationRelativeTo(null);
+         addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                INVENTARIO n=new INVENTARIO();
+                n.setVisible(true);
+            }
+        });
         
         
         

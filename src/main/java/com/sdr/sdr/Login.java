@@ -5,6 +5,8 @@
  */
 package com.sdr.sdr;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Jaime Andres
@@ -16,6 +18,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -30,9 +33,9 @@ public class Login extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         UsuarioTXT = new javax.swing.JTextField();
-        ContraTXT = new javax.swing.JTextField();
         IngresarBTN = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        ContraTXT = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -43,22 +46,39 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setText("Contraseña:");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
-        getContentPane().add(UsuarioTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 160, 20));
-        getContentPane().add(ContraTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 170, 160, 20));
+        getContentPane().add(UsuarioTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 160, -1));
 
         IngresarBTN.setText("Ingresar");
+        IngresarBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IngresarBTNActionPerformed(evt);
+            }
+        });
         getContentPane().add(IngresarBTN, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("LOGIN");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 160, 50));
+        getContentPane().add(ContraTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 170, 160, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sdr 4.png"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 300));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void IngresarBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IngresarBTNActionPerformed
+        String usuario=UsuarioTXT.getText();
+        String contra=ContraTXT.getText();
+        if(usuario.equals("") || contra.equals("")){
+            JOptionPane.showMessageDialog(null,"Favor de llenar todas las cajas de texto");
+        }else{
+            INVENTARIO obj=new INVENTARIO();
+            obj.setVisible(true);
+            this.dispose();
+        }
+    }//GEN-LAST:event_IngresarBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -96,7 +116,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField ContraTXT;
+    private javax.swing.JPasswordField ContraTXT;
     private javax.swing.JButton IngresarBTN;
     private javax.swing.JTextField UsuarioTXT;
     private javax.swing.JLabel jLabel1;

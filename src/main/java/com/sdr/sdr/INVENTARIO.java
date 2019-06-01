@@ -5,6 +5,8 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import javax.swing.table.DefaultTableModel;
 import static com.sdr.sdr.Main.db;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 import javax.swing.ImageIcon;
@@ -26,6 +28,14 @@ public class INVENTARIO extends javax.swing.JFrame {
         initComponents();
         llenar();
         setLocationRelativeTo(null);
+        
+         addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                Login n=new Login();
+                n.setVisible(true);
+            }
+        });
     }
 
     @SuppressWarnings("unchecked")

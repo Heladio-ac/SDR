@@ -43,7 +43,7 @@ public class Main {
         //</editor-fold>
         //</editor-fold>
         
-        INVENTARIO ob=new INVENTARIO();
+        Login ob=new Login();
         ob.setVisible(true);
     }
     
