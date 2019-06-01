@@ -56,5 +56,16 @@ public class Main {
             }
         };
         return model;
+        
+    }
+    public static DefaultTableModel tabla1(){
+        String[] columnNames = {"Articulo", "Codigo","Precio","Stock"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0){
+            @Override
+            public boolean isCellEditable(int fil, int col) {
+                return col==3;
+            }
+        };
+        return model;
     }
 }

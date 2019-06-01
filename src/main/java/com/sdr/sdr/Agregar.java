@@ -264,6 +264,7 @@ public class Agregar extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void agregar(Map<String, List<String>> datos) {
+        
         Document documento = new Document();
         documento.put("ARTICULO", TxtArticulo.getText().trim().toUpperCase());
         documento.put("CODIGO", TxtCodigo.getText().trim().toUpperCase());
