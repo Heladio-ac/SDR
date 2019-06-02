@@ -6,6 +6,7 @@ import static com.mongodb.client.model.Aggregates.*;
 import static com.sdr.sdr.Main.db;
 import de.erichseifert.gral.data.Column;
 import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.data.comparators.Descending;
 import de.erichseifert.gral.data.statistics.Statistics;
 import de.erichseifert.gral.graphics.Insets2D;
 import de.erichseifert.gral.graphics.Location;
@@ -60,6 +61,7 @@ public class Reportes extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -89,6 +91,19 @@ public class Reportes extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Compras por fecha", jPanel2);
 
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 701, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 338, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Ventas por producto", jPanel3);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -106,6 +121,7 @@ public class Reportes extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 
@@ -174,6 +190,8 @@ public class Reportes extends javax.swing.JFrame {
         this.jTabbedPane1.setComponentAt(0, new InteractivePanel(graficaVentas));
         XYPlot graficaCompras = crearGraficaCompras();
         this.jTabbedPane1.setComponentAt(1, new InteractivePanel(graficaCompras));
+        XYPlot graficaVentasPareto = crearGraficaVentasPareto();
+        this.jTabbedPane1.setComponentAt(2, new InteractivePanel(graficaVentasPareto));
     }
 
     private XYPlot crearGraficaCompras() {
@@ -233,5 +251,61 @@ public class Reportes extends javax.swing.JFrame {
 	axisRendererY.setMinorTicksCount(4);
 	axisRendererY.setTickLabelFormat(new DecimalFormat("$0"));
         return graficaCompras;
+    }
+
+    private XYPlot crearGraficaVentasPareto() {
+        MongoCollection<Document> productos = db.getCollection("movimientos");
+        AggregateIterable<Document> resultado = productos.aggregate(Arrays.asList(
+                match(new Document("TipoMov.Salida", 1)),
+                group(new Document()
+                    .append("_id", "$Cantidad")
+                    .append("Ganancia", new Document("$sum", "$TotalPrecio"))
+                ),
+                sort(new Document("_id.Ganancia", -1))
+        ));
+        DataTable data = new DataTable(Integer.class, Double.class, String.class);
+        int i = 0;
+        for (Document doc : resultado) {
+            Document documento = doc.get("_id", Document.class);
+            String producto = documento.get("_id", String.class);
+            Double ganancia = documento.get("Ganancia", Double.class);
+            data.add(++i, ganancia, producto);  
+        }
+        BarPlot graficaPareto = new BarPlot(data);
+        graficaPareto.setInsets(new Insets2D.Double(0.0, 60.0, 40.0, 0.0));
+        graficaPareto.setBarWidth(0.75);
+        BarRenderer pointRenderer = (BarRenderer) graficaPareto.getPointRenderers(data).get(0);
+        pointRenderer.setColor(
+		new LinearGradientPaint(0f,0f, 0f,1f,
+                    new float[] { 0.0f, 1.0f },
+                    new Color[] { Color.GREEN, GraphicsUtils.deriveBrighter(Color.GREEN) }
+            )
+        );
+            pointRenderer.setBorderStroke(new BasicStroke(3f));
+            pointRenderer.setBorderColor(
+		new LinearGradientPaint(0f,0f, 0f,1f,
+                    new float[] { 0.0f, 1.0f },
+                    new Color[] { GraphicsUtils.deriveBrighter(Color.GREEN), Color.GREEN }
+            )
+	);
+        pointRenderer.setValueVisible(true);
+	pointRenderer.setValueColumn(2);
+	pointRenderer.setValueLocation(Location.CENTER);
+        pointRenderer.setValueColor(GraphicsUtils.deriveDarker(Color.GREEN));
+	pointRenderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
+        Column col1 = data.getColumn(0);
+        graficaPareto.getAxis(XYPlot.AXIS_X).setRange(
+            col1.getStatistics(Statistics.MIN) - 1,
+            col1.getStatistics(Statistics.MAX) + 1
+	);
+        Column col2 = data.getColumn(1);
+        graficaPareto.getAxis(XYPlot.AXIS_Y).setRange(
+            0,
+            col2.getStatistics(Statistics.MAX)*1.05
+	);
+        AxisRenderer axisRendererY = graficaPareto.getAxisRenderer(XYPlot.AXIS_Y);
+	axisRendererY.setMinorTicksCount(4);
+	axisRendererY.setTickLabelFormat(new DecimalFormat("$0"));
+        return graficaPareto;
     }
 }
