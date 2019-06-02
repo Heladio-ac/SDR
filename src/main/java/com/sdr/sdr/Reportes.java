@@ -1,9 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.sdr.sdr;
+
+import com.mongodb.client.AggregateIterable;
+import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Aggregates.*;
+import static com.sdr.sdr.Main.db;
+import de.erichseifert.gral.data.Column;
+import de.erichseifert.gral.data.DataTable;
+import de.erichseifert.gral.data.statistics.Statistics;
+import de.erichseifert.gral.graphics.Insets2D;
+import de.erichseifert.gral.graphics.Location;
+import de.erichseifert.gral.plots.BarPlot;
+import de.erichseifert.gral.plots.BarPlot.BarRenderer;
+import de.erichseifert.gral.plots.XYPlot;
+import de.erichseifert.gral.plots.axes.AxisRenderer;
+import de.erichseifert.gral.ui.InteractivePanel;
+import de.erichseifert.gral.util.GraphicsUtils;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.LinearGradientPaint;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.text.DecimalFormat;
+import java.util.Arrays;
+import javax.swing.JFrame;
+import org.bson.Document;
 
 /**
  *
@@ -16,6 +37,15 @@ public class Reportes extends javax.swing.JFrame {
      */
     public Reportes() {
         initComponents();
+        agregarGraficas();
+        setLocationRelativeTo(null);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                INVENTARIO n=new INVENTARIO();
+                n.setVisible(true);
+            }
+        });
     }
 
     /**
@@ -31,86 +61,177 @@ public class Reportes extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 273, Short.MAX_VALUE)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("tab1", jPanel1);
+        jTabbedPane1.addTab("Ventas por fecha", jPanel1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGap(0, 701, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 273, Short.MAX_VALUE)
+            .addGap(0, 338, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("tab2", jPanel2);
+        jTabbedPane1.addTab("Compras por fecha", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 706, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Reportes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Reportes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Reportes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Reportes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Reportes().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
+
+       
+    public static BarPlot crearGraficaVentas() {
+        MongoCollection<Document> productos = db.getCollection("movimientos");
+        AggregateIterable<Document> resultado = productos.aggregate(Arrays.asList(
+                match(new Document("TipoMov.Salida", 1)),
+                project(new Document()
+                    .append("Fecha",new Document("$substr", Arrays.asList("$FechaMov", 0, 10)))
+                    .append("Ganancia", "$TotalPrecio")
+                ),
+                group(new Document()
+                    .append("_id", "$Fecha")
+                    .append("Ganancia", new Document("$sum", "$Ganancia"))
+                )
+        ));
+        DataTable data = new DataTable(Integer.class, Double.class, String.class);
+        int i = 0;
+        for (Document doc : resultado) {
+            Document documento = doc.get("_id", Document.class);
+            String fecha = documento.get("_id", String.class);
+            Double ganancia = documento.get("Ganancia", Double.class);
+            data.add(++i, ganancia, fecha);  
+        }
+        BarPlot graficaVentas = new BarPlot(data);
+        graficaVentas.setInsets(new Insets2D.Double(0.0, 60.0, 40.0, 0.0));
+        graficaVentas.setBarWidth(0.75);
+        BarRenderer pointRenderer = (BarRenderer) graficaVentas.getPointRenderers(data).get(0);
+        pointRenderer.setColor(
+		new LinearGradientPaint(0f,0f, 0f,1f,
+                    new float[] { 0.0f, 1.0f },
+                    new Color[] { Color.BLUE, GraphicsUtils.deriveBrighter(Color.BLUE) }
+            )
+        );
+            pointRenderer.setBorderStroke(new BasicStroke(3f));
+            pointRenderer.setBorderColor(
+		new LinearGradientPaint(0f,0f, 0f,1f,
+                    new float[] { 0.0f, 1.0f },
+                    new Color[] { GraphicsUtils.deriveBrighter(Color.BLUE), Color.BLUE }
+            )
+	);
+        pointRenderer.setValueVisible(true);
+	pointRenderer.setValueColumn(2);
+	pointRenderer.setValueLocation(Location.CENTER);
+        pointRenderer.setValueColor(GraphicsUtils.deriveDarker(Color.BLUE));
+	pointRenderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
+        Column col1 = data.getColumn(0);
+        graficaVentas.getAxis(XYPlot.AXIS_X).setRange(
+            col1.getStatistics(Statistics.MIN) - 1,
+            col1.getStatistics(Statistics.MAX) + 1
+	);
+        Column col2 = data.getColumn(1);
+        graficaVentas.getAxis(XYPlot.AXIS_Y).setRange(
+            0,
+            col2.getStatistics(Statistics.MAX)*1.05
+	);
+        AxisRenderer axisRendererY = graficaVentas.getAxisRenderer(XYPlot.AXIS_Y);
+	axisRendererY.setMinorTicksCount(4);
+	axisRendererY.setTickLabelFormat(new DecimalFormat("$0"));
+        return graficaVentas;
+    }
+    
+    private void agregarGraficas() {
+        XYPlot graficaVentas = crearGraficaVentas();
+        this.jTabbedPane1.setComponentAt(0, new InteractivePanel(graficaVentas));
+        XYPlot graficaCompras = crearGraficaCompras();
+        this.jTabbedPane1.setComponentAt(1, new InteractivePanel(graficaCompras));
+    }
+
+    private XYPlot crearGraficaCompras() {
+        MongoCollection<Document> productos = db.getCollection("movimientos");
+        AggregateIterable<Document> resultado = productos.aggregate(Arrays.asList(
+                match(new Document("TipoMov.Entrada", 1)),
+                project(new Document()
+                    .append("Fecha",new Document("$substr", Arrays.asList("$FechaMov", 0, 10)))
+                    .append("Ganancia", "$TotalPrecio")
+                ),
+                group(new Document()
+                    .append("_id", "$Fecha")
+                    .append("Ganancia", new Document("$sum", "$Ganancia"))
+                )
+        ));
+        DataTable data = new DataTable(Integer.class, Double.class, String.class);
+        int i = 0;
+        for (Document doc : resultado) {
+            Document documento = doc.get("_id", Document.class);
+            String fecha = documento.get("_id", String.class);
+            Double ganancia = documento.get("Ganancia", Double.class);
+            data.add(++i, ganancia, fecha);  
+        }
+        BarPlot graficaCompras = new BarPlot(data);
+        graficaCompras.setInsets(new Insets2D.Double(0.0, 60.0, 40.0, 0.0));
+        graficaCompras.setBarWidth(0.75);
+        BarRenderer pointRenderer = (BarRenderer) graficaCompras.getPointRenderers(data).get(0);
+        pointRenderer.setColor(
+		new LinearGradientPaint(0f,0f, 0f,1f,
+                    new float[] { 0.0f, 1.0f },
+                    new Color[] { Color.GREEN, GraphicsUtils.deriveBrighter(Color.GREEN) }
+            )
+        );
+            pointRenderer.setBorderStroke(new BasicStroke(3f));
+            pointRenderer.setBorderColor(
+		new LinearGradientPaint(0f,0f, 0f,1f,
+                    new float[] { 0.0f, 1.0f },
+                    new Color[] { GraphicsUtils.deriveBrighter(Color.GREEN), Color.GREEN }
+            )
+	);
+        pointRenderer.setValueVisible(true);
+	pointRenderer.setValueColumn(2);
+	pointRenderer.setValueLocation(Location.CENTER);
+        pointRenderer.setValueColor(GraphicsUtils.deriveDarker(Color.GREEN));
+	pointRenderer.setValueFont(Font.decode(null).deriveFont(Font.BOLD));
+        Column col1 = data.getColumn(0);
+        graficaCompras.getAxis(XYPlot.AXIS_X).setRange(
+            col1.getStatistics(Statistics.MIN) - 1,
+            col1.getStatistics(Statistics.MAX) + 1
+	);
+        Column col2 = data.getColumn(1);
+        graficaCompras.getAxis(XYPlot.AXIS_Y).setRange(
+            0,
+            col2.getStatistics(Statistics.MAX)*1.05
+	);
+        AxisRenderer axisRendererY = graficaCompras.getAxisRenderer(XYPlot.AXIS_Y);
+	axisRendererY.setMinorTicksCount(4);
+	axisRendererY.setTickLabelFormat(new DecimalFormat("$0"));
+        return graficaCompras;
+    }
 }

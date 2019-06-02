@@ -402,7 +402,6 @@ if (!Character.isLetter(evt.getKeyChar())) {
         MongoCollection<Document> collection = db.getCollection("productos");
         double actual =Double.parseDouble(txtactual.getText());
         double cantidad =Double.parseDouble(txtcantidad.getText());
-        String date="Date()";
         Document documento = new Document();
         documento.put("Cantidad", txtproducto.getText().trim().toUpperCase());
         documento.put("Codigo", txtcodigo.getText().trim().toUpperCase());
@@ -411,7 +410,7 @@ if (!Character.isLetter(evt.getKeyChar())) {
         movimiento.put("Salida", 1.0);
         documento.put("TotalMercancia", Double.parseDouble(txtcantidad.getText()));
         documento.put("TotalPrecio", Double.parseDouble(txttotal.getText()));
-        documento.put("FechaMov", date);
+        documento.put("FechaMov", new Date());
         documento.put("TipoMov", movimiento);
         db.getCollection("movimientos").insertOne(documento);
         collection.updateOne(Filters.eq("CODIGO",txtcodigo.getText()),Updates.set("STOCK.ACTUAL",actual+=cantidad));

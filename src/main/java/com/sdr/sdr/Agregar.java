@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import static com.sdr.sdr.Main.db;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;

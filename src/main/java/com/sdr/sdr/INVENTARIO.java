@@ -57,6 +57,7 @@ public class INVENTARIO extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        jButton6 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
         jMenuItem1.setText("Verificar Si El Inventario es bajo");
@@ -147,7 +148,7 @@ public class INVENTARIO extends javax.swing.JFrame {
         });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 110, 123, -1));
 
-        jButton5.setText("VENTAS");
+        jButton5.setText("Ventas");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -169,6 +170,14 @@ public class INVENTARIO extends javax.swing.JFrame {
         jScrollPane2.setViewportView(table);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 57, 547, 285));
+
+        jButton6.setText("Reportes");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 170, 120, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SDR2.png"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 400));
@@ -376,10 +385,16 @@ if(t.length()>0)
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-Ventas c = new Ventas();
-c.setVisible(true);
-dispose();// TODO add your handling code here:
+        Ventas c = new Ventas();
+        c.setVisible(true);
+        dispose();// TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Reportes r = new Reportes();
+        r.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButton6ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -390,6 +405,7 @@ dispose();// TODO add your handling code here:
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
