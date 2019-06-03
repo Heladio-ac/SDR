@@ -41,13 +41,15 @@ public double precio;
     public Ventas() {
         initComponents();
         setLocationRelativeTo(null);
+        llenar();
 
-        setLocationRelativeTo(null);
+        
          addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 INVENTARIO n=new INVENTARIO();
                 n.setVisible(true);
+                
             }
         });
          jLabel16.setText(fecha);
@@ -80,13 +82,12 @@ public double precio;
             
             public void apply(final Document document) {
                 txtproducto.setText((String) document.get("ARTICULO"));    
-              txtcodigo.setText((String) document.get("CODIGO"));
+                txtcodigo.setText((String) document.get("CODIGO"));
                 Document qty = (Document) document.get("STOCK");                
                 double act = (double) qty.get("ACTUAL");
                 int actual = (int) act;              
                 txtactual.setText("" + actual);
-                
-                 precio = (double) document.get("PRECIO");
+                precio = (double) document.get("PRECIO");
                 txtprecio.setText("" + precio);
           
            }
@@ -177,8 +178,6 @@ public void llenar() {
         txtcantidad = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         txtproducto = new javax.swing.JTextField();
@@ -214,17 +213,6 @@ public void llenar() {
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, -1, -1));
 
-        table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableMouseClicked(evt);
@@ -259,27 +247,21 @@ public void llenar() {
         });
         getContentPane().add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 180, 150, -1));
 
-        jButton2.setText("-");
+        jButton2.setText("realizar venta");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 260, 48, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 250, 100, -1));
 
-        jButton3.setText("+");
+        jButton3.setText("Entrada");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 260, 52, -1));
-
-        jLabel10.setText("ENTRADA");
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 240, -1, -1));
-
-        jLabel11.setText("SALIDA");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 240, -1, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 280, 100, -1));
 
         jButton5.setText("INVENTARIO");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -287,7 +269,7 @@ public void llenar() {
                 jButton5ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 290, -1, -1));
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 320, -1, -1));
 
         jButton6.setText("AGREGAR");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -295,7 +277,7 @@ public void llenar() {
                 jButton6ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 320, 95, -1));
+        getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 320, 95, -1));
         getContentPane().add(txtproducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(537, 65, 160, -1));
         getContentPane().add(txtprecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(537, 91, 160, -1));
         getContentPane().add(txtcodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(537, 117, 160, 25));
@@ -311,7 +293,7 @@ public void llenar() {
 
         jLabel15.setText("Total:     $");
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 210, 60, -1));
-        getContentPane().add(txttotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 210, 150, 20));
+        getContentPane().add(txttotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 210, 150, 30));
 
         jLabel16.setText("jLabel5");
         getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 480, 120, 20));
@@ -510,8 +492,6 @@ dispose();
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
