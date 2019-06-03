@@ -3,16 +3,23 @@ package com.sdr.sdr;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
+import static com.sdr.sdr.Login.fecha;
 import javax.swing.table.DefaultTableModel;
 import static com.sdr.sdr.Main.db;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import org.bson.Document;
 
 /**
@@ -36,6 +43,23 @@ public class INVENTARIO extends javax.swing.JFrame {
                 n.setVisible(true);
             }
         });
+         
+        jLabel5.setText(fecha);
+        Timer tiempo=new Timer(100,new INVENTARIO.hora());
+        tiempo.start();
+    }
+    
+    class hora implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Date hora=new Date();
+            String pmam="hh:mm:ss a";
+            SimpleDateFormat format=new SimpleDateFormat(pmam);
+            Calendar hoy=Calendar.getInstance();
+            jLabel6.setText(String.format(format.format(hora),hoy));
+        }
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -58,6 +82,8 @@ public class INVENTARIO extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         jMenuItem1.setText("Verificar Si El Inventario es bajo");
@@ -178,6 +204,12 @@ public class INVENTARIO extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 170, 120, -1));
+
+        jLabel5.setText("jLabel5");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 300, 120, 20));
+
+        jLabel6.setText("jLabel6");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, 120, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SDR2.png"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 700, 400));
@@ -409,6 +441,8 @@ if(t.length()>0)
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPopupMenu jPopupMenu1;

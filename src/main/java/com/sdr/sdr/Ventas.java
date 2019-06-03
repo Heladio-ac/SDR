@@ -13,13 +13,19 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import static com.sdr.sdr.Login.fecha;
 import static com.sdr.sdr.Main.db;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import org.bson.Document;
 
@@ -44,8 +50,24 @@ public double precio;
                 n.setVisible(true);
             }
         });
+         jLabel16.setText(fecha);
+        Timer tiempo=new Timer(100,new Ventas.hora());
+        tiempo.start();
         
         
+        
+    }
+    
+    class hora implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Date hora=new Date();
+            String pmam="hh:mm:ss a";
+            SimpleDateFormat format=new SimpleDateFormat(pmam);
+            Calendar hoy=Calendar.getInstance();
+            jLabel17.setText(String.format(format.format(hora),hoy));
+        }
         
     }
     void recuperarDatos(String codigo) {
@@ -167,6 +189,8 @@ public void llenar() {
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
         txttotal = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -288,6 +312,12 @@ public void llenar() {
         jLabel15.setText("Total:     $");
         getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 210, 60, -1));
         getContentPane().add(txttotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 210, 150, 20));
+
+        jLabel16.setText("jLabel5");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 480, 120, 20));
+
+        jLabel17.setText("jLabel6");
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 480, 110, 20));
 
         jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sdr5.png"))); // NOI18N
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 540));
@@ -486,6 +516,8 @@ dispose();
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;

@@ -10,12 +10,19 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import static com.sdr.sdr.Login.fecha;
 import static com.sdr.sdr.Main.db;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import org.bson.Document;
 
 /**
@@ -40,6 +47,22 @@ public class Actualizar extends javax.swing.JFrame {
         });
         this.codigo=codigo;
         recuperarDatos(codigo);
+        jLabel9.setText(fecha);
+        Timer tiempo=new Timer(100,new Actualizar.hora());
+        tiempo.start();
+    }
+    
+    class hora implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Date hora=new Date();
+            String pmam="hh:mm:ss a";
+            SimpleDateFormat format=new SimpleDateFormat(pmam);
+            Calendar hoy=Calendar.getInstance();
+            jLabel10.setText(String.format(format.format(hora),hoy));
+        }
+        
     }
 
     void recuperarDatos(String codigo) {
@@ -100,6 +123,8 @@ public class Actualizar extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         TxtPrecio = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
         Background = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -167,6 +192,12 @@ public class Actualizar extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("ACTUALIZAR");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 180, 30));
+
+        jLabel9.setText("jLabel5");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 120, -1));
+
+        jLabel10.setText("jLabel6");
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 320, 110, -1));
 
         Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SDR.png"))); // NOI18N
         getContentPane().add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 400));
@@ -245,12 +276,14 @@ public class Actualizar extends javax.swing.JFrame {
     private javax.swing.JTextField TxtStockMin;
     private javax.swing.JTextField TxtTipo;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 
 

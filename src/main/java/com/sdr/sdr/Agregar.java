@@ -18,6 +18,13 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import org.bson.Document;
 import org.springframework.cache.annotation.Cacheable;
+import static com.sdr.sdr.Login.fecha;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.Timer;
 
 /**
  *
@@ -39,8 +46,24 @@ public class Agregar extends javax.swing.JFrame {
                 n.setVisible(true);
             }
         });
+        jLabel11.setText(fecha);
+        Timer tiempo=new Timer(100,new Agregar.hora());
+        tiempo.start();
     }
 
+    
+    class hora implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Date hora=new Date();
+            String pmam="hh:mm:ss a";
+            SimpleDateFormat format=new SimpleDateFormat(pmam);
+            Calendar hoy=Calendar.getInstance();
+            jLabel12.setText(String.format(format.format(hora),hoy));
+        }
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -69,6 +92,8 @@ public class Agregar extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         TxtPrecio = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -148,6 +173,12 @@ public class Agregar extends javax.swing.JFrame {
         jLabel10.setForeground(new java.awt.Color(255, 255, 255));
         jLabel10.setText("AGREGAR");
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 130, 30));
+
+        jLabel11.setText("jLabel5");
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 490, 120, 20));
+
+        jLabel12.setText("jLabel6");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 490, 110, 20));
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/SDR3.png"))); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 540, 560));
@@ -250,6 +281,8 @@ public class Agregar extends javax.swing.JFrame {
     private javax.swing.JTextField TxtTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

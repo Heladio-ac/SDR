@@ -5,7 +5,13 @@
  */
 package com.sdr.sdr;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 /**
  *
@@ -16,9 +22,29 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
+    public static String fecha;
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
+        Date fechas=new Date();
+        SimpleDateFormat format=new SimpleDateFormat("dd-MMM-YYYY");
+        fecha=format.format(fechas);
+        jLabel5.setText(fecha);
+        Timer tiempo=new Timer(100,new Login.hora());
+        tiempo.start();
+    }
+    
+    class hora implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            Date hora=new Date();
+            String pmam="hh:mm:ss a";
+            SimpleDateFormat format=new SimpleDateFormat(pmam);
+            Calendar hoy=Calendar.getInstance();
+            jLabel6.setText(String.format(format.format(hora),hoy));
+        }
+        
     }
 
     /**
@@ -36,6 +62,8 @@ public class Login extends javax.swing.JFrame {
         IngresarBTN = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         ContraTXT = new javax.swing.JPasswordField();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -61,6 +89,12 @@ public class Login extends javax.swing.JFrame {
         jLabel4.setText("LOGIN");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 160, 50));
         getContentPane().add(ContraTXT, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 170, 160, -1));
+
+        jLabel5.setText("jLabel5");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 230, 120, -1));
+
+        jLabel6.setText("jLabel6");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 230, 110, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sdr 4.png"))); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 400, 300));
@@ -123,5 +157,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables
 }
